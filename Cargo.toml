@@ -5,3 +5,4 @@ authors = ["Ryooooooga <ryoga_314@yahoo.co.jp>"]
 edition = "2018"
 
 [dependencies]
+clap = "2.33.0"
