@@ -23,4 +23,6 @@ pub fn prompt(opts: &Opts) {
     for segment in &segments {
         segments::prompt_segment(&mut p, segment);
     }
+
+    p.opts.shell.clear_color();
 }

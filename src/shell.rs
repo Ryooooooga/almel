@@ -5,7 +5,11 @@ pub enum Error {
 
 pub trait Shell {
     fn name(&self) -> &'static str;
+
     fn print_init(&self);
+
+    fn set_color(&self, foreground: &str, background: &str);
+    fn clear_color(&self);
 }
 
 pub fn shell_from_name(shell_name: &str) -> Result<Box<dyn Shell>, Error> {
@@ -25,5 +29,13 @@ impl Shell for Zsh {
 
     fn print_init(&self) {
         print!("{}", include_str!("init.zsh"));
+    }
+
+    fn set_color(&self, foreground: &str, background: &str) {
+        print!("%{{%F{{{}}}%K{{{}}}%}}", foreground, background);
+    }
+
+    fn clear_color(&self) {
+        self.set_color("default", "default");
     }
 }
