@@ -1,0 +1,7 @@
+[package]
+name = "almel"
+version = "0.1.0"
+authors = ["Ryooooooga <ryoga_314@yahoo.co.jp>"]
+edition = "2018"
+
+[dependencies]
