@@ -1,6 +1,5 @@
-pub fn init(shell: &str) {
-    match shell {
-        "zsh" => println!("{}", include_str!("init.zsh")),
-        _ => panic!("unknown shell: '{}'. Supported shells: zsh", shell),
-    };
+use crate::shell::Shell;
+
+pub fn init(shell: &dyn Shell) {
+    shell.print_init();
 }

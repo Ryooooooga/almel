@@ -1,6 +1,7 @@
 mod init;
 mod prompt;
 mod segments;
+mod shell;
 
 use crate::prompt::{prompt, Opts};
 use clap::{App, Arg, SubCommand};
@@ -34,16 +35,23 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(args)) => {
             // almel init <shell>
-            let shell = args.value_of("shell").unwrap(); // Never be none
-            init::init(shell);
+            let shell_name = args.value_of("shell").unwrap(); // Never be none
+            let shell = shell::shell_from_name(shell_name).unwrap(); // TODO: better error handling
+
+            init::init(shell.as_ref());
         }
         ("prompt", Some(args)) => {
             // almel prompt <shell>
-            let shell = args.value_of("shell").unwrap(); // Never be none
-            let exit_status = args.value_of("exit-status").unwrap(); // Never be none
-            let exit_status = exit_status.parse::<i32>().unwrap();
+            let shell_name = args.value_of("shell").unwrap(); // Never be none
+            let shell = shell::shell_from_name(shell_name).unwrap(); // TODO: better error handling
 
-            prompt(&Opts { shell, exit_status });
+            let exit_status = args.value_of("exit-status").unwrap(); // Never be none
+            let exit_status = exit_status.parse::<i32>().unwrap(); // TODO: better error handling
+
+            prompt(&Opts {
+                shell: shell.as_ref(),
+                exit_status,
+            });
         }
         _ => panic!("Unreachable"),
     };
