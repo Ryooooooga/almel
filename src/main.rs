@@ -1,5 +1,6 @@
 mod init;
 mod prompt;
+mod segments;
 
 use clap::{App, Arg, SubCommand};
 
