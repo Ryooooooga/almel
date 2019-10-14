@@ -16,6 +16,9 @@ pub enum PromptError {
 
     #[fail(display = "Env error: {}", 0)]
     EnvError(env::EnvError),
+
+    #[fail(display = "Git error: {}", 0)]
+    GitError(git2::Error),
 }
 
 impl From<io::Error> for PromptError {
@@ -27,6 +30,12 @@ impl From<io::Error> for PromptError {
 impl From<env::EnvError> for PromptError {
     fn from(err: env::EnvError) -> PromptError {
         PromptError::EnvError(err)
+    }
+}
+
+impl From<git2::Error> for PromptError {
+    fn from(err: git2::Error) -> PromptError {
+        PromptError::GitError(err)
     }
 }
 
@@ -93,7 +102,7 @@ impl<'w, W: io::Write> Prompt<'w, W> {
 pub fn prompt(shell: Shell) -> Result<(), PromptError> {
     let mut buffer = std::io::stdout();
     let mut p = Prompt::new(shell, &mut buffer);
-    let segments = ["user", "dir", "exit_status"];
+    let segments = ["user", "dir", "git", "exit_status"];
 
     for segment in &segments {
         segments::prompt_segment(&mut p, segment)?;
