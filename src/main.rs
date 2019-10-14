@@ -1,3 +1,4 @@
+mod glyph;
 mod init;
 mod prompt;
 mod segments;

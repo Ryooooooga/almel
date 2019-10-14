@@ -8,6 +8,6 @@ pub fn prompt_segment(p: &mut Prompt) {
         .and_then(|s| s.to_str())
         .unwrap_or("?");
 
-    p.opts.shell.set_color("black", "blue");
-    print!("{} >", current_dir);
+    p.start_segment("black", "blue");
+    print!("{}", current_dir);
 }
