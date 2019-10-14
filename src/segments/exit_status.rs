@@ -1,13 +1,14 @@
-use crate::prompt::Prompt;
+use std::fmt;
 
-pub fn prompt_segment(p: &mut Prompt) {
-    if p.opts.exit_status == 0 {
-        // Succeeded
-        p.start_segment("black", "white");
-        print!("{}", p.opts.exit_status);
-    } else {
-        // Failed
-        p.start_segment("white", "red");
-        print!("{}", p.opts.exit_status);
-    }
+use crate::prompt::{Prompt, PromptError};
+
+pub fn prompt_segment<W: fmt::Write>(p: &mut Prompt<W>) -> Result<(), PromptError> {
+    let exit_status = std::env::var("exit_status")
+        .ok()
+        .and_then(|status| status.parse::<i32>().ok())
+        .unwrap_or(-1);
+
+    p.write_segment("white", "lime", &format!("{}", exit_status))?;
+
+    Ok(())
 }

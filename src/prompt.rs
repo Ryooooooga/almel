@@ -1,62 +1,59 @@
-use crate::glyph;
+use failure::Fail;
+use std::fmt;
+
 use crate::segments;
 use crate::shell::Shell;
 
-pub struct Opts<'a> {
-    pub exit_status: i32,
-    pub shell: &'a dyn Shell,
+#[derive(Debug, Fail)]
+pub enum PromptError {
+    #[fail(display = "Unknown segment name: {}", 0)]
+    UnknownSegment(String),
+
+    #[fail(display = "fmt::Error: {}", 0)]
+    FmtError(fmt::Error),
 }
 
-pub struct Prompt<'a> {
-    pub opts: &'a Opts<'a>,
+impl From<fmt::Error> for PromptError {
+    fn from(err: fmt::Error) -> PromptError {
+        PromptError::FmtError(err)
+    }
+}
+
+pub struct Prompt<'w, W: fmt::Write> {
+    pub shell: Shell,
+    pub output: &'w mut W,
     pub current_bg: Option<String>,
 }
 
-impl<'a> Prompt<'a> {
-    pub fn new(opts: &'a Opts<'a>) -> Prompt {
-        Prompt {
-            opts,
+impl<'w, W: fmt::Write> Prompt<'w, W> {
+    pub fn new(shell: Shell, output: &'w mut W) -> Self {
+        Self {
+            shell,
+            output,
             current_bg: None,
         }
     }
 
-    pub fn start_segment<S: Into<String>>(&mut self, foreground: &str, background: S) {
-        let background = background.into();
-
-        if let Some(curreng_bg) = &self.current_bg {
-            print!(" ");
-            self.opts.shell.set_color(&curreng_bg, &background);
-            print!("{}", glyph::segment_separator::LEFT_SOLID);
-        }
-
-        self.opts.shell.set_color(foreground, &background);
-        self.current_bg = Some(background);
-
-        print!(" ");
-    }
-
-    pub fn end_segments(&mut self) {
-        print!(" ");
-
-        if let Some(curreng_bg) = &self.current_bg {
-            self.opts.shell.set_color(&curreng_bg, "default");
-            print!("{}", glyph::segment_separator::LEFT_SOLID);
-        }
-
-        self.opts.shell.clear_color();
-        self.current_bg = None;
-
-        print!(" ");
+    pub fn write_segment(
+        &mut self,
+        background: &str,
+        foreground: &str,
+        segment: &str,
+    ) -> fmt::Result {
+        write!(self.output, " {} ", segment)
     }
 }
 
-pub fn prompt(opts: &Opts) {
-    let mut p = Prompt::new(opts);
-    let segments = ["user", "dir", "exit-status"];
+pub fn prompt(shell: Shell) -> Result<(), PromptError> {
+    let mut buffer = String::new();
+    let mut p = Prompt::new(shell, &mut buffer);
+    let segments = ["user", "dir", "exit_status"];
 
     for segment in &segments {
-        segments::prompt_segment(&mut p, segment);
+        segments::prompt_segment(&mut p, segment)?;
     }
 
-    p.end_segments();
+    print!("{}", buffer);
+
+    Ok(())
 }

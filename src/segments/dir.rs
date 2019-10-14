@@ -1,13 +1,9 @@
-use crate::prompt::Prompt;
+use std::fmt;
 
-pub fn prompt_segment(p: &mut Prompt) {
-    let current_dir = std::env::current_dir();
-    let current_dir = current_dir
-        .as_ref()
-        .ok()
-        .and_then(|s| s.to_str())
-        .unwrap_or("?");
+use crate::prompt::{Prompt, PromptError};
 
-    p.start_segment("black", "blue");
-    print!("{}", current_dir);
+pub fn prompt_segment<W: fmt::Write>(p: &mut Prompt<W>) -> Result<(), PromptError> {
+    p.write_segment("blue", "black", "%~")?;
+
+    Ok(())
 }

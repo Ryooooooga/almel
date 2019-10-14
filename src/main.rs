@@ -4,10 +4,28 @@ mod prompt;
 mod segments;
 mod shell;
 
-use crate::prompt::{prompt, Opts};
 use clap::{App, Arg, SubCommand};
+use failure::Fail;
 
-fn main() {
+use crate::prompt::PromptError;
+use crate::shell::Shell;
+
+#[derive(Debug, Fail)]
+pub enum Error {
+    #[fail(display = "Unsupported shell: {}", 0)]
+    UnsupportedShell(String),
+
+    #[fail(display = "Prompt error: {}", 0)]
+    PromptError(PromptError),
+}
+
+impl From<PromptError> for Error {
+    fn from(err: PromptError) -> Error {
+        Error::PromptError(err)
+    }
+}
+
+fn run() -> Result<(), Error> {
     let matches = App::new(clap::crate_name!())
         .version(clap::crate_version!())
         .author(clap::crate_authors!())
@@ -22,13 +40,6 @@ fn main() {
         .subcommand(
             SubCommand::with_name("prompt")
                 .about("Print the prompt")
-                .arg(
-                    Arg::with_name("exit-status")
-                        .help("Exit status of previous command")
-                        .long("exit-status")
-                        .takes_value(true)
-                        .required(true),
-                )
                 .arg(Arg::with_name("shell").help("Shell name").required(true)),
         )
         .get_matches();
@@ -36,24 +47,27 @@ fn main() {
     match matches.subcommand() {
         ("init", Some(args)) => {
             // almel init <shell>
-            let shell_name = args.value_of("shell").unwrap(); // Never be none
-            let shell = shell::shell_from_name(shell_name).unwrap(); // TODO: better error handling
+            let shell_name = args.value_of("shell").unwrap(); // Will never be none
+            let shell = Shell::from_name(shell_name)?;
 
-            init::init(shell.as_ref());
+            init::init(shell)?;
         }
         ("prompt", Some(args)) => {
             // almel prompt <shell>
-            let shell_name = args.value_of("shell").unwrap(); // Never be none
-            let shell = shell::shell_from_name(shell_name).unwrap(); // TODO: better error handling
+            let shell_name = args.value_of("shell").unwrap(); // Will never be none
+            let shell = Shell::from_name(shell_name)?;
 
-            let exit_status = args.value_of("exit-status").unwrap(); // Never be none
-            let exit_status = exit_status.parse::<i32>().unwrap(); // TODO: better error handling
-
-            prompt(&Opts {
-                shell: shell.as_ref(),
-                exit_status,
-            });
+            prompt::prompt(shell)?;
         }
         _ => panic!("Unreachable"),
     };
+
+    Ok(())
+}
+
+fn main() {
+    if let Err(err) = run() {
+        eprintln!("{}", err);
+        std::process::exit(1);
+    }
 }

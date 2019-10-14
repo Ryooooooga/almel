@@ -4,7 +4,7 @@ preexec() {
 }
 
 precmd_almel() {
-    PROMPT="$(almel prompt zsh --exit-status="$?")"
+    PROMPT="$(exit_status=$? almel prompt zsh)"
 }
 
 for s in "${precmd_functions[@]}"; do
