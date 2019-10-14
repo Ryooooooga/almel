@@ -2,11 +2,11 @@ pub mod dir;
 pub mod exit_status;
 pub mod user;
 
-use std::fmt;
+use std::io;
 
 use crate::prompt::{Prompt, PromptError};
 
-pub fn prompt_segment<W: fmt::Write>(
+pub fn prompt_segment<W: io::Write>(
     p: &mut Prompt<W>,
     segment_name: &str,
 ) -> Result<(), PromptError> {

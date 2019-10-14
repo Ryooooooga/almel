@@ -1,7 +1,8 @@
 use failure::Fail;
-use std::fmt;
+use std::io;
 
 use crate::env;
+use crate::glyph;
 use crate::segments;
 use crate::shell::Shell;
 
@@ -10,16 +11,16 @@ pub enum PromptError {
     #[fail(display = "Unknown segment name: {}", 0)]
     UnknownSegment(String),
 
-    #[fail(display = "Format Error: {}", 0)]
-    FmtError(fmt::Error),
+    #[fail(display = "IO Error: {}", 0)]
+    IOError(io::Error),
 
     #[fail(display = "Env error: {}", 0)]
     EnvError(env::EnvError),
 }
 
-impl From<fmt::Error> for PromptError {
-    fn from(err: fmt::Error) -> PromptError {
-        PromptError::FmtError(err)
+impl From<io::Error> for PromptError {
+    fn from(err: io::Error) -> PromptError {
+        PromptError::IOError(err)
     }
 }
 
@@ -29,13 +30,13 @@ impl From<env::EnvError> for PromptError {
     }
 }
 
-pub struct Prompt<'w, W: fmt::Write> {
+pub struct Prompt<'w, W: io::Write> {
     pub shell: Shell,
     pub output: &'w mut W,
     pub current_bg: Option<String>,
 }
 
-impl<'w, W: fmt::Write> Prompt<'w, W> {
+impl<'w, W: io::Write> Prompt<'w, W> {
     pub fn new(shell: Shell, output: &'w mut W) -> Self {
         Self {
             shell,
@@ -44,18 +45,50 @@ impl<'w, W: fmt::Write> Prompt<'w, W> {
         }
     }
 
+    fn set_color(&mut self, background: &str, foreground: &str) -> io::Result<()> {
+        match self.shell {
+            Shell::Zsh => write!(
+                self.output,
+                "%{{%K{{{}}}%F{{{}}}%}}",
+                background, foreground
+            ),
+        }
+    }
+
+    fn write_segment_separator(&mut self, background: &str, foreground: &str) -> io::Result<()> {
+        write!(self.output, " ")?;
+
+        let current_bg = std::mem::replace(&mut self.current_bg, Some(background.to_string()));
+
+        if let Some(current_bg) = current_bg {
+            self.set_color(background, &current_bg)?;
+            write!(self.output, "{} ", glyph::segment_separator::LEFT_SOLID)?;
+        }
+
+        self.set_color(background, foreground)?;
+
+        Ok(())
+    }
+
     pub fn write_segment(
         &mut self,
         background: &str,
         foreground: &str,
         segment: &str,
-    ) -> fmt::Result {
-        write!(self.output, " {} ", segment)
+    ) -> io::Result<()> {
+        self.write_segment_separator(background, foreground)?;
+        write!(self.output, "{}", segment)?;
+
+        Ok(())
+    }
+
+    pub fn close_segments(&mut self) -> io::Result<()> {
+        self.write_segment_separator("default", "default")
     }
 }
 
 pub fn prompt(shell: Shell) -> Result<(), PromptError> {
-    let mut buffer = String::new();
+    let mut buffer = std::io::stdout();
     let mut p = Prompt::new(shell, &mut buffer);
     let segments = ["user", "dir", "exit_status"];
 
@@ -63,7 +96,7 @@ pub fn prompt(shell: Shell) -> Result<(), PromptError> {
         segments::prompt_segment(&mut p, segment)?;
     }
 
-    print!("{}", buffer);
+    p.close_segments()?;
 
     Ok(())
 }
