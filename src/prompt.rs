@@ -56,13 +56,11 @@ impl<'w, W: io::Write> Prompt<'w, W> {
     }
 
     fn write_segment_separator(&mut self, background: &str, foreground: &str) -> io::Result<()> {
-        write!(self.output, " ")?;
-
         let current_bg = std::mem::replace(&mut self.current_bg, Some(background.to_string()));
 
         if let Some(current_bg) = current_bg {
             self.set_color(background, &current_bg)?;
-            write!(self.output, "{} ", glyph::segment_separator::LEFT_SOLID)?;
+            write!(self.output, "{}", glyph::segment_separator::LEFT_SOLID)?;
         }
 
         self.set_color(background, foreground)?;
@@ -77,13 +75,18 @@ impl<'w, W: io::Write> Prompt<'w, W> {
         segment: &str,
     ) -> io::Result<()> {
         self.write_segment_separator(background, foreground)?;
-        write!(self.output, "{}", segment)?;
+        write!(self.output, " {} ", segment)?;
 
         Ok(())
     }
 
     pub fn close_segments(&mut self) -> io::Result<()> {
-        self.write_segment_separator("default", "default")
+        self.write_segment_separator("default", "default")?;
+        self.current_bg = None;
+
+        write!(self.output, " ")?;
+
+        Ok(())
     }
 }
 
