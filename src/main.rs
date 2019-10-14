@@ -8,11 +8,11 @@ use crate::prompt::{prompt, Opts};
 use clap::{App, Arg, SubCommand};
 
 fn main() {
-    let matches = App::new("almel")
+    let matches = App::new(clap::crate_name!())
         .version(clap::crate_version!())
+        .author(clap::crate_authors!())
+        .about(clap::crate_description!())
         .version_short("v")
-        .author("Ryooooooga")
-        .about("A ZSH theme inspired by agnoster-zsh-theme")
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .subcommand(
             SubCommand::with_name("init")
