@@ -1,6 +1,7 @@
 use failure::Fail;
 use std::fmt;
 
+use crate::env;
 use crate::segments;
 use crate::shell::Shell;
 
@@ -9,13 +10,22 @@ pub enum PromptError {
     #[fail(display = "Unknown segment name: {}", 0)]
     UnknownSegment(String),
 
-    #[fail(display = "fmt::Error: {}", 0)]
+    #[fail(display = "Format Error: {}", 0)]
     FmtError(fmt::Error),
+
+    #[fail(display = "Env error: {}", 0)]
+    EnvError(env::EnvError),
 }
 
 impl From<fmt::Error> for PromptError {
     fn from(err: fmt::Error) -> PromptError {
         PromptError::FmtError(err)
+    }
+}
+
+impl From<env::EnvError> for PromptError {
+    fn from(err: env::EnvError) -> PromptError {
+        PromptError::EnvError(err)
     }
 }
 

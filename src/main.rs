@@ -1,3 +1,4 @@
+mod env;
 mod glyph;
 mod init;
 mod prompt;
