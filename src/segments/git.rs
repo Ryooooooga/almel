@@ -24,6 +24,7 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
         Err(_) => return Ok(()), // TODO: Repositoty without any commits
     };
 
+    // Show the HEAD status
     if head.is_branch() {
         // Show the current branch name
         let branch_name = head.shorthand().unwrap_or("?");
@@ -49,6 +50,13 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
             let commit_icon = "\u{f417}";
 
             p.write_segment("green", "black", &format!("{} {}", commit_icon, hash))?;
+        }
+    }
+
+    // Show the user name
+    if let Ok(config) = repo.config() {
+        if let Ok(user_name) = config.get_string("user.name") {
+            p.write_segment("cyan", "black", &format!("@{}", user_name))?;
         }
     }
 
