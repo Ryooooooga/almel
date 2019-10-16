@@ -4,11 +4,17 @@ use std::io;
 use crate::prompt::{Prompt, PromptError};
 
 fn find_tag(repo: &Repository, oid: &Oid) -> Option<String> {
-    let refs = repo.references().ok()?.flatten();
-    let tag = refs.filter(|r| r.target().as_ref() == Some(oid)).next()?;
-    let ref_name = tag.shorthand()?.to_string();
+    let tag = repo
+        .references()
+        .ok()?
+        .flatten()
+        .filter(|r| r.is_tag())
+        .filter(|r| r.target().as_ref() == Some(oid))
+        .next()?;
 
-    Some(ref_name.to_string())
+    let tag_name = tag.shorthand()?.to_string();
+
+    Some(tag_name.to_string())
 }
 
 pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError> {
@@ -25,22 +31,20 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
     };
 
     // Show the HEAD status
+    let head_text;
+
     if head.is_branch() {
         // Show the current branch name
         let branch_name = head.shorthand().unwrap_or("?");
         let branch_icon = "\u{f418}";
 
-        p.write_segment(
-            "green",
-            "black",
-            &format!("{} {}", branch_icon, branch_name),
-        )?;
+        head_text = format!("{} {}", branch_icon, branch_name);
     } else if let Some(oid) = head.target() {
         if let Some(tag) = find_tag(&repo, &oid) {
             // Show the tag name
             let tag_icon = "\u{f412}";
 
-            p.write_segment("green", "black", &format!("{} {}", tag_icon, tag))?;
+            head_text = format!("{} {}", tag_icon, tag);
         } else {
             // Show the current commit hash
             let hash_len = 6;
@@ -49,14 +53,18 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
 
             let commit_icon = "\u{f417}";
 
-            p.write_segment("green", "black", &format!("{} {}", commit_icon, hash))?;
+            head_text = format!("{} {}", commit_icon, hash);
         }
+    } else {
+        head_text = "?".to_string();
     }
+
+    p.write_segment("green", "black", &head_text)?;
 
     // Show the user name
     if let Ok(config) = repo.config() {
         if let Ok(user_name) = config.get_string("user.name") {
-            p.write_segment("cyan", "black", &format!("@{}", user_name))?;
+            p.write_segment("cyan", "black", &format!("{} {}", "\u{f2c0}", user_name))?;
         }
     }
 
