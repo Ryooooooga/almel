@@ -137,7 +137,7 @@ fn get_segment_colors(repo_statuses: &Status) -> (&'static str, &'static str) {
     }
 }
 
-fn format_graph(repo: &Repository, head: &Option<Reference>) -> Option<String> {
+fn format_graph_icons(repo: &Repository, head: &Option<Reference>) -> Option<String> {
     let head = head.as_ref()?;
 
     let ahead_icon = "\u{f176}";
@@ -183,8 +183,8 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
     // Get the segment colors
     let (background, foreground) = get_segment_colors(&repo_statuses);
 
-    // Show the graph
-    let graph = format_graph(&repo, &head);
+    // Show the graph icons
+    let graph_icons = format_graph_icons(&repo, &head);
 
     // Build the git segment
     let mut text = head_status;
@@ -194,9 +194,9 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
         text += &status_icons;
     }
 
-    if let Some(graph) = graph {
+    if let Some(graph_icons) = graph_icons {
         text += " ";
-        text += &graph;
+        text += &graph_icons;
     }
 
     p.write_segment(background, foreground, &text)?;
