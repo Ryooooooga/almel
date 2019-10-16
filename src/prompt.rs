@@ -54,6 +54,10 @@ impl<'w, W: io::Write> Prompt<'w, W> {
         }
     }
 
+    pub fn write(&mut self, text: impl AsRef<str>) -> io::Result<()> {
+        write!(self.output, "{}", text.as_ref())
+    }
+
     fn set_color(&mut self, background: &str, foreground: &str) -> io::Result<()> {
         match self.shell {
             Shell::Zsh => write!(
@@ -102,7 +106,7 @@ impl<'w, W: io::Write> Prompt<'w, W> {
 pub fn prompt(shell: Shell) -> Result<(), PromptError> {
     let mut buffer = std::io::stdout();
     let mut p = Prompt::new(shell, &mut buffer);
-    let segments = ["user", "dir", "git", "exit_status"];
+    let segments = ["user", "dir", "git", "newline", "exit_status"];
 
     for segment in &segments {
         segments::prompt_segment(&mut p, segment)?;

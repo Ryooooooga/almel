@@ -1,6 +1,7 @@
 pub mod dir;
 pub mod exit_status;
 pub mod git;
+pub mod newline;
 pub mod user;
 
 use std::io;
@@ -16,6 +17,7 @@ pub fn prompt_segment<W: io::Write>(
         "dir" => dir::prompt_segment(p),
         "git" => git::prompt_segment(p),
         "exit_status" => exit_status::prompt_segment(p),
+        "newline" => newline::prompt_segment(p),
         _ => panic!("unknown segment '{}'", segment_name),
     }
 }
