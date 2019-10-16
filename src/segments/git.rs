@@ -132,35 +132,37 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
     let minus_icon = "-";
     let conflict_icon = "\u{f47f}";
 
-    let mut icons = String::new();
+    let mut status_icons = String::new();
 
     if file_statuses.intersects(modified_statuses) {
-        icons += modified_icon;
+        status_icons += modified_icon;
     }
 
     match (
         file_statuses.intersects(added_statuses),
         file_statuses.intersects(deleted_statuses),
     ) {
-        (true, true) => icons += plus_minus_icon,
-        (true, false) => icons += plus_icon,
-        (false, true) => icons += minus_icon,
+        (true, true) => status_icons += plus_minus_icon,
+        (true, false) => status_icons += plus_icon,
+        (false, true) => status_icons += minus_icon,
         (false, false) => {}
     }
 
     if file_statuses.intersects(conflicted_statuses) {
-        icons += conflict_icon;
+        status_icons += conflict_icon;
     }
 
-    p.write_segment(
-        background,
-        foreground,
-        &if icons.is_empty() {
-            format!("{}", head_text)
-        } else {
-            format!("{} {}", head_text, icons)
-        },
-    )?;
+    // Show the git segment
+    let mut text = String::new();
+
+    text += &head_text;
+
+    if !status_icons.is_empty() {
+        text += " ";
+        text += &status_icons;
+    }
+
+    p.write_segment(background, foreground, &text)?;
 
     // Show the user name
     if let Ok(config) = repo.config() {
