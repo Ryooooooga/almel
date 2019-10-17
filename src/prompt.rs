@@ -106,7 +106,7 @@ impl<'w, W: io::Write> Prompt<'w, W> {
 pub fn prompt(shell: Shell) -> Result<(), PromptError> {
     let mut buffer = std::io::stdout();
     let mut p = Prompt::new(shell, &mut buffer);
-    let segments = ["user", "dir", "git", "newline", "status"];
+    let segments = ["os", "user", "dir", "git", "newline", "status"];
 
     for segment in &segments {
         segments::prompt_segment(&mut p, segment)?;

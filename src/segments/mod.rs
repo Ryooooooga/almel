@@ -1,6 +1,7 @@
 pub mod dir;
 pub mod git;
 pub mod newline;
+pub mod os;
 pub mod status;
 pub mod user;
 
@@ -13,6 +14,7 @@ pub fn prompt_segment<W: io::Write>(
     segment_name: &str,
 ) -> Result<(), PromptError> {
     match segment_name {
+        "os" => os::prompt_segment(p),
         "user" => user::prompt_segment(p),
         "dir" => dir::prompt_segment(p),
         "git" => git::prompt_segment(p),
