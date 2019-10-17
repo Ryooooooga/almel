@@ -1,0 +1,53 @@
+os:
+  linux:
+    background: "cyan"
+    foreground: "white"
+    icon: "\uf17c" # nf-fa-linux
+  mac:
+    background: "cyan"
+    foreground: "white"
+    icon: "\uf179" # nf-fa-apple
+  windows:
+    background: "cyan"
+    foreground: "white"
+    icon: "\uf17a" # nf-fa-windows
+
+user:
+  background: "black"
+  foreground: "white"
+  display_host: true
+
+dir:
+  background: "blue"
+  foreground: "black"
+  shrink_path: false # TODO
+
+git: {}
+
+newline: {}
+
+status:
+  root_icon: "\ue00a" # nf-pom-external_interruption
+  job_icon: "\uf013" # nf-fa-gear
+
+  succeeded:
+    background: "white"
+    foreground: "blue"
+    icon: "\uf62b" # nf-mdi-check
+
+  failed:
+    background: "red"
+    foreground: "white"
+    icon: "\uf06a" # nf-fa-exclamation_circle
+    display_exit_code: true
+
+segment_separators:
+  left_solid: "\ue0b0" # nf-pl-left_hard_divider
+
+segments:
+  - os
+  - user
+  - dir
+  - git
+  - newline
+  - status
