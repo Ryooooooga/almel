@@ -3,22 +3,10 @@ use std::io;
 use crate::env;
 use crate::prompt::{Prompt, PromptError};
 
-fn get_exit_status() -> Option<i32> {
-    env::var("exit_status").ok()?.parse().ok()
-}
-
-fn get_uid() -> Option<u64> {
-    env::var("UID").ok()?.parse().ok()
-}
-
-fn get_jobs() -> Option<i32> {
-    env::var("jobs").ok()?.trim().parse().ok()
-}
-
 pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError> {
-    let exit_status = get_exit_status().unwrap_or(-1);
-    let uid = get_uid();
-    let jobs = get_jobs().unwrap_or(0);
+    let exit_status = env::var("exit_status")?.parse::<i32>().unwrap_or(-1);
+    let uid = users::get_current_uid();
+    let jobs = env::var("jobs")?;
 
     let success_icon = "\u{f62b}";
     let failure_icon = "\u{f06a}";
@@ -50,13 +38,13 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError
     }
 
     // Root user?
-    if uid == Some(0) {
+    if uid == 0 {
         segment += " ";
         segment += root_icon;
     }
 
     // Jobs
-    if jobs > 0 {
+    if !jobs.is_empty() {
         segment += " ";
         segment += jobs_icon;
     }

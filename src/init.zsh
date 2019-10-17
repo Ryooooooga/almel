@@ -4,7 +4,7 @@ preexec() {
 }
 
 precmd_almel() {
-    PROMPT="$(exit_status="$?" jobs=$(jobs | wc -l) almel prompt zsh)"
+    PROMPT="$(exit_status="$?" jobs=$(jobs) almel prompt zsh)"
 }
 
 for s in "${precmd_functions[@]}"; do
