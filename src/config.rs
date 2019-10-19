@@ -50,7 +50,17 @@ pub struct DirConfig {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct GitConfig {}
+pub struct GitUserConfig {
+    pub display: bool,
+    pub background: String,
+    pub foreground: String,
+    pub icon: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitConfig {
+    pub user: GitUserConfig,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NewLineConfig {}

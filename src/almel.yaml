@@ -22,7 +22,12 @@ dir:
   foreground: "black"
   shrink_path: false # TODO
 
-git: {}
+git:
+  user:
+    display: true
+    background: "cyan"
+    foreground: "black"
+    icon: "\uf2c0"
 
 newline: {}
 

@@ -1,3 +1,5 @@
+mod git_user;
+
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use std::io;
 
@@ -206,11 +208,7 @@ pub fn prompt_segment<W: io::Write>(
     p.write_segment(background, foreground, &text)?;
 
     // Show the user name
-    if let Ok(config) = repo.config() {
-        if let Ok(user_name) = config.get_string("user.name") {
-            p.write_segment("cyan", "black", &format!("{} {}", "\u{f2c0}", user_name))?;
-        }
-    }
+    git_user::prompt_subsegment(p, &config.user, &repo)?;
 
     Ok(())
 }
