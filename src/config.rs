@@ -50,6 +50,27 @@ pub struct DirConfig {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct GitHeadStatusConfigClean {
+    pub background: String,
+    pub foreground: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitHeadStatusConfigConflicted {
+    pub background: String,
+    pub foreground: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitHeadStatusConfig {
+    pub display: bool,
+    pub clean: GitHeadStatusConfigClean,
+    pub conflicted: GitHeadStatusConfigConflicted,
+    pub behind_icon: String,
+    pub ahead_icon: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GitUserConfig {
     pub display: bool,
     pub background: String,
@@ -59,6 +80,7 @@ pub struct GitUserConfig {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GitConfig {
+    pub head_status: GitHeadStatusConfig,
     pub user: GitUserConfig,
 }
 

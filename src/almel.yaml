@@ -23,6 +23,24 @@ dir:
   shrink_path: false # TODO
 
 git:
+  head_status:
+    display: true
+
+    clean:
+      background: "green"
+      foreground: "black"
+
+    conflicted:
+      background: "red"
+      foreground: "black"
+
+    branch_icon: "\uf418" # nf-oct-git_branch
+    tag_icon: "\uf412" # nf-oct-tag
+    commit_icon: "\uf417" # nf-oct-git_commit
+    conflicted_icon: "\uf47f" # nf-oct-git_compare
+    behind_icon: "\uf175" # nf-fa-long_arrow_down
+    ahead_icon: "\uf176" # nf-fa-long_arrow_up
+
   user:
     display: true
     background: "cyan"
