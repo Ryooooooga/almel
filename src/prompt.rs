@@ -115,9 +115,7 @@ impl<'w, W: io::Write> Prompt<'w, W> {
 }
 
 pub fn prompt(shell: Shell) -> Result<(), PromptError> {
-    // Load config
-    let yaml = include_str!("almel.yaml");
-    let config = Config::load_from_str(yaml)?;
+    let config = Config::load_from_file_or_create()?;
 
     let mut buffer = std::io::stdout();
     let mut p = Prompt::new(shell, &mut buffer, &config.segment_separators);
