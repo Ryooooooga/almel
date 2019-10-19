@@ -1,0 +1,93 @@
+version: 1.0
+#
+# os:
+#   linux:
+#     background: "cyan"
+#     foreground: "white"
+#     icon: "\uf17c" # nf-fa-linux
+#   mac:
+#     background: "cyan"
+#     foreground: "white"
+#     icon: "\uf179" # nf-fa-apple
+#   windows:
+#     background: "cyan"
+#     foreground: "white"
+#     icon: "\uf17a" # nf-fa-windows
+#
+# user:
+#   background: "black"
+#   foreground: "white"
+#   display_host: true
+#
+# dir:
+#   background: "blue"
+#   foreground: "black"
+#   shrink_path: false # TODO
+#
+# git:
+#   head_status:
+#     display: true
+#
+#     clean:
+#       background: "green"
+#       foreground: "black"
+#
+#     unstaged:
+#       background: "yellow"
+#       foreground: "black"
+#
+#     staged:
+#       background: "green"
+#       foreground: "black"
+#
+#     conflicted:
+#       background: "red"
+#       foreground: "black"
+#
+#     branch_icon: "\uf418" # nf-oct-git_branch
+#     tag_icon: "\uf412" # nf-oct-tag
+#     commit_icon: "\uf417" # nf-oct-git_commit
+#     commit_hash_len: 6
+#
+#     modified_icon: "…"
+#     added_icon: "+"
+#     deleted_icon: "-"
+#     added_deleted_icon: "±"
+#     conflicted_icon: "\uf47f" # nf-oct-git_compare
+#
+#     behind_icon: "\uf175" # nf-fa-long_arrow_down
+#     ahead_icon: "\uf176" # nf-fa-long_arrow_up
+#
+#   user:
+#     display: true
+#     background: "cyan"
+#     foreground: "black"
+#     icon: "\uf2c0" # nf-fa-user_o
+#
+# newline: {}
+#
+# status:
+#   root_icon: "\ue00a" # nf-pom-external_interruption
+#   job_icon: "\uf013" # nf-fa-gear
+#
+#   succeeded:
+#     background: "white"
+#     foreground: "blue"
+#     icon: "\uf62b" # nf-mdi-check
+#
+#   failed:
+#     background: "red"
+#     foreground: "white"
+#     icon: "\uf06a" # nf-fa-exclamation_circle
+#     display_exit_code: true
+#
+# segment_separators:
+#   left_solid: "\ue0b0" # nf-pl-left_hard_divider
+#
+# segments:
+#   - os
+#   - user
+#   - dir
+#   - git
+#   - newline
+#   - status
