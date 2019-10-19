@@ -1,6 +1,7 @@
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use std::io;
 
+use crate::config::GitConfig;
 use crate::prompt::{Prompt, PromptError};
 
 fn find_tag<'repo>(repo: &'repo Repository, oid: &Oid) -> Option<Reference<'repo>> {
@@ -162,7 +163,10 @@ fn format_graph_icons(repo: &Repository, head: &Option<Reference>) -> Option<Str
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>) -> Result<(), PromptError> {
+pub fn prompt_segment<W: io::Write>(
+    p: &mut Prompt<W>,
+    config: &GitConfig,
+) -> Result<(), PromptError> {
     // Open the current repository
     let repo = match Repository::discover(".") {
         Ok(repo) => repo,

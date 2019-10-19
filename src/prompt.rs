@@ -123,7 +123,7 @@ pub fn prompt(shell: Shell) -> Result<(), PromptError> {
     let mut p = Prompt::new(shell, &mut buffer, &config.segment_separators);
 
     for segment in &config.segments {
-        segments::prompt_segment(&mut p, segment)?;
+        segments::prompt_segment(&mut p, &config, segment)?;
     }
 
     p.close_segments()?;

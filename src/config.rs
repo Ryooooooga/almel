@@ -4,41 +4,66 @@ use serde::{Deserialize, Serialize};
 use crate::env;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct OsEntry {
+pub struct OsConfigEntry {
     pub background: String,
     pub foreground: String,
     pub icon: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Os {
-    pub linux: OsEntry,
-    pub mac: OsEntry,
-    pub windows: OsEntry,
+pub struct OsConfig {
+    pub linux: OsConfigEntry,
+    pub mac: OsConfigEntry,
+    pub windows: OsConfigEntry,
+}
+
+impl OsConfig {
+    #[cfg(target_os = "linux")]
+    pub fn entry(&self) -> &OsConfigEntry {
+        // TODO: Distributions
+        &self.linux
+    }
+
+    #[cfg(target_os = "macos")]
+    pub fn entry(&self) -> &OsConfigEntry {
+        &self.mac
+    }
+
+    #[cfg(target_os = "windows")]
+    pub fn entry(&self) -> &OsConfigEntry {
+        &self.windows
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct User {
+pub struct UserConfig {
     pub background: String,
     pub foreground: String,
     pub display_host: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Git {}
+pub struct DirConfig {
+    pub background: String,
+    pub foreground: String,
+    pub shrink_path: bool,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Newline {}
+pub struct GitConfig {}
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct StatusSucceeded {
+pub struct NewLineConfig {}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct StatusConfigSucceeded {
     pub background: String,
     pub foreground: String,
     pub icon: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct StatusFailed {
+pub struct StatusConfigFailed {
     pub background: String,
     pub foreground: String,
     pub icon: String,
@@ -46,11 +71,11 @@ pub struct StatusFailed {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Status {
+pub struct StatusConfig {
     pub root_icon: String,
     pub job_icon: String,
-    pub succeeded: StatusSucceeded,
-    pub failed: StatusFailed,
+    pub succeeded: StatusConfigSucceeded,
+    pub failed: StatusConfigFailed,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -62,11 +87,12 @@ type Segments = Vec<String>;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub os: Os,
-    pub user: User,
-    pub git: Git,
-    pub newline: Newline,
-    pub status: Status,
+    pub os: OsConfig,
+    pub user: UserConfig,
+    pub dir: DirConfig,
+    pub git: GitConfig,
+    pub newline: NewLineConfig,
+    pub status: StatusConfig,
     pub segment_separators: SegmentSeparators,
     pub segments: Segments,
 }
