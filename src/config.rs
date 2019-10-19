@@ -1,24 +1,27 @@
+use failure::Fail;
 use serde::{Deserialize, Serialize};
+
+use crate::env;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OsEntry {
-    background: String,
-    foreground: String,
-    icon: String,
+    pub background: String,
+    pub foreground: String,
+    pub icon: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Os {
-    linux: OsEntry,
-    mac: OsEntry,
-    windows: OsEntry,
+    pub linux: OsEntry,
+    pub mac: OsEntry,
+    pub windows: OsEntry,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
-    background: String,
-    foreground: String,
-    display_host: bool,
+    pub background: String,
+    pub foreground: String,
+    pub display_host: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -29,49 +32,75 @@ pub struct Newline {}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct StatusSucceeded {
-    background: String,
-    foreground: String,
-    icon: String,
+    pub background: String,
+    pub foreground: String,
+    pub icon: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct StatusFailed {
-    background: String,
-    foreground: String,
-    icon: String,
-    display_exit_code: bool,
+    pub background: String,
+    pub foreground: String,
+    pub icon: String,
+    pub display_exit_code: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Status {
-    root_icon: String,
-    job_icon: String,
-    succeeded: StatusSucceeded,
-    failed: StatusFailed,
+    pub root_icon: String,
+    pub job_icon: String,
+    pub succeeded: StatusSucceeded,
+    pub failed: StatusFailed,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SegmentSeparators {
-    left_solid: String,
+    pub left_solid: String,
 }
 
 type Segments = Vec<String>;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    os: Os,
-    user: User,
-    git: Git,
-    newline: Newline,
-    status: Status,
-    segment_separators: SegmentSeparators,
-    segments: Segments,
+    pub os: Os,
+    pub user: User,
+    pub git: Git,
+    pub newline: Newline,
+    pub status: Status,
+    pub segment_separators: SegmentSeparators,
+    pub segments: Segments,
+}
+
+#[derive(Debug, Fail)]
+pub enum ConfigError {
+    #[fail(display = "serde_yaml::Error: {}", 0)]
+    SerdeYamlError(serde_yaml::Error),
+}
+
+impl From<serde_yaml::Error> for ConfigError {
+    fn from(err: serde_yaml::Error) -> Self {
+        Self::SerdeYamlError(err)
+    }
 }
 
 impl Config {
-    pub fn load(path: &str) {
-        let config = serde_yaml::from_str::<Config>(path);
+    pub fn config_path() -> String {
+        let default_config_file_name = "almel.yaml";
 
-        eprintln!("{:#?}", config);
+        if let Ok(path) = env::var("ALMEL_CONFIG_FILE") {
+            path
+        } else if let Ok(config_home) = env::var("XDG_CONFIG_HOME") {
+            format!("{}/almel/{}", config_home, default_config_file_name)
+        } else if let Ok(home) = env::var("HOME") {
+            format!("{}/.config/almel/{}", home, default_config_file_name)
+        } else {
+            format!("~/.config/almel/{}", default_config_file_name)
+        }
+    }
+
+    pub fn load_from_str(string: &str) -> Result<Config, ConfigError> {
+        let config = serde_yaml::from_str(string)?;
+
+        Ok(config)
     }
 }

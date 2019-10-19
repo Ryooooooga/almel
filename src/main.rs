@@ -1,6 +1,5 @@
 mod config;
 mod env;
-mod glyph;
 mod init;
 mod prompt;
 mod segments;
@@ -45,10 +44,6 @@ fn run() -> Result<(), Error> {
                 .arg(Arg::with_name("shell").help("Shell name").required(true)),
         )
         .get_matches();
-
-    // Load config
-    let yaml = include_str!("almel.yaml");
-    let config = config::Config::load(yaml);
 
     match matches.subcommand() {
         ("init", Some(args)) => {
