@@ -2,139 +2,69 @@ use failure::Fail;
 use serde::{Deserialize, Serialize};
 
 use crate::env;
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct OsConfigEntry {
-    pub background: String,
-    pub foreground: String,
-    pub icon: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct OsConfig {
-    pub linux: OsConfigEntry,
-    pub mac: OsConfigEntry,
-    pub windows: OsConfigEntry,
-}
-
-impl OsConfig {
-    #[cfg(target_os = "linux")]
-    pub fn entry(&self) -> &OsConfigEntry {
-        // TODO: Distributions
-        &self.linux
-    }
-
-    #[cfg(target_os = "macos")]
-    pub fn entry(&self) -> &OsConfigEntry {
-        &self.mac
-    }
-
-    #[cfg(target_os = "windows")]
-    pub fn entry(&self) -> &OsConfigEntry {
-        &self.windows
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserConfig {
-    pub background: String,
-    pub foreground: String,
-    pub display_host: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DirConfig {
-    pub background: String,
-    pub foreground: String,
-    pub shrink_path: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GitHeadStatusConfigColors {
-    pub background: String,
-    pub foreground: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GitHeadStatusConfig {
-    pub display: bool,
-    pub clean: GitHeadStatusConfigColors,
-    pub unstaged: GitHeadStatusConfigColors,
-    pub staged: GitHeadStatusConfigColors,
-    pub conflicted: GitHeadStatusConfigColors,
-
-    pub branch_icon: String,
-    pub tag_icon: String,
-    pub commit_icon: String,
-    pub commit_hash_len: u32,
-
-    pub modified_icon: String,
-    pub added_icon: String,
-    pub deleted_icon: String,
-    pub added_deleted_icon: String,
-    pub conflicted_icon: String,
-
-    pub behind_icon: String,
-    pub ahead_icon: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GitUserConfig {
-    pub display: bool,
-    pub background: String,
-    pub foreground: String,
-    pub icon: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GitConfig {
-    pub head_status: GitHeadStatusConfig,
-    pub user: GitUserConfig,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct NewLineConfig {}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct StatusConfigSucceeded {
-    pub background: String,
-    pub foreground: String,
-    pub icon: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct StatusConfigFailed {
-    pub background: String,
-    pub foreground: String,
-    pub icon: String,
-    pub display_exit_code: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct StatusConfig {
-    pub root_icon: String,
-    pub job_icon: String,
-    pub succeeded: StatusConfigSucceeded,
-    pub failed: StatusConfigFailed,
-}
+use crate::segments::dir;
+use crate::segments::git;
+use crate::segments::newline;
+use crate::segments::os;
+use crate::segments::status;
+use crate::segments::user;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SegmentSeparators {
+    #[serde(default = "SegmentSeparators::default_left_solid")]
     pub left_solid: String,
+}
+
+impl SegmentSeparators {
+    fn default_left_solid() -> String {
+        "\u{e0b0}".to_string() // nf-pl-left_hard_divider
+    }
+}
+
+impl Default for SegmentSeparators {
+    fn default() -> Self {
+        Self {
+            left_solid: Self::default_left_solid(),
+        }
+    }
 }
 
 type Segments = Vec<String>;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub os: OsConfig,
-    pub user: UserConfig,
-    pub dir: DirConfig,
-    pub git: GitConfig,
-    pub newline: NewLineConfig,
-    pub status: StatusConfig,
+    #[serde(default)]
+    pub os: os::Config,
+
+    #[serde(default)]
+    pub user: user::Config,
+
+    #[serde(default)]
+    pub dir: dir::Config,
+
+    #[serde(default)]
+    pub git: git::Config,
+
+    #[serde(default)]
+    pub newline: newline::Config,
+
+    #[serde(default)]
+    pub status: status::Config,
+
+    #[serde(default)]
     pub segment_separators: SegmentSeparators,
+
+    #[serde(default = "Config::default_segments")]
     pub segments: Segments,
+}
+
+impl Config {
+    fn default_segments() -> Segments {
+        ["os", "user", "dir", "git", "newline", "status"]
+            .iter()
+            .map(|s| s.to_string())
+            .collect()
+    }
 }
 
 #[derive(Debug, Fail)]

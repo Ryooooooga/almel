@@ -1,8 +1,228 @@
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
+use serde::{Deserialize, Serialize};
+use std::default::Default;
 use std::io::Write;
 
-use crate::config::GitHeadStatusConfig;
 use crate::prompt::{Prompt, PromptError};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Config {
+    #[serde(default = "Config::default_display")]
+    pub display: bool,
+
+    #[serde(default)]
+    pub clean: ConfigClean,
+    #[serde(default)]
+    pub unstaged: ConfigUnstaged,
+    #[serde(default)]
+    pub staged: ConfigStaged,
+    #[serde(default)]
+    pub conflicted: ConfigConflicted,
+
+    #[serde(default = "Config::default_branch_icon")]
+    pub branch_icon: String,
+    #[serde(default = "Config::default_tag_icon")]
+    pub tag_icon: String,
+    #[serde(default = "Config::default_commit_icon")]
+    pub commit_icon: String,
+    #[serde(default = "Config::default_commit_hash_len")]
+    pub commit_hash_len: u32,
+
+    #[serde(default = "Config::default_modified_icon")]
+    pub modified_icon: String,
+    #[serde(default = "Config::default_added_icon")]
+    pub added_icon: String,
+    #[serde(default = "Config::default_deleted_icon")]
+    pub deleted_icon: String,
+    #[serde(default = "Config::default_added_deleted_icon")]
+    pub added_deleted_icon: String,
+    #[serde(default = "Config::default_conflicted_icon")]
+    pub conflicted_icon: String,
+
+    #[serde(default = "Config::default_behind_icon")]
+    pub behind_icon: String,
+    #[serde(default = "Config::default_ahead_icon")]
+    pub ahead_icon: String,
+}
+
+impl Config {
+    fn default_display() -> bool {
+        true
+    }
+    fn default_branch_icon() -> String {
+        "\u{f418}".to_string() // nf-oct-git_branch
+    }
+    fn default_tag_icon() -> String {
+        "\u{f412}".to_string() // nf-oct-tag
+    }
+    fn default_commit_icon() -> String {
+        "\u{f417}".to_string() // nf-oct-git_commit
+    }
+    fn default_commit_hash_len() -> u32 {
+        6
+    }
+    fn default_modified_icon() -> String {
+        "…".to_string()
+    }
+    fn default_added_icon() -> String {
+        "+".to_string()
+    }
+
+    fn default_deleted_icon() -> String {
+        "-".to_string()
+    }
+    fn default_added_deleted_icon() -> String {
+        "±".to_string()
+    }
+    fn default_conflicted_icon() -> String {
+        "\u{f47f}".to_string() // nf-oct-git_compare
+    }
+    fn default_behind_icon() -> String {
+        "\u{f175}".to_string() // nf-fa-long_arrow_down
+    }
+    fn default_ahead_icon() -> String {
+        "\u{f176}".to_string() // nf-fa-long_arrow_up
+    }
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            display: Self::default_display(),
+
+            clean: ConfigClean::default(),
+            unstaged: ConfigUnstaged::default(),
+            staged: ConfigStaged::default(),
+            conflicted: ConfigConflicted::default(),
+
+            branch_icon: Self::default_branch_icon(),
+            tag_icon: Self::default_tag_icon(),
+            commit_icon: Self::default_commit_icon(),
+            commit_hash_len: Self::default_commit_hash_len(),
+
+            modified_icon: Self::default_modified_icon(),
+            added_icon: Self::default_added_icon(),
+            deleted_icon: Self::default_deleted_icon(),
+            added_deleted_icon: Self::default_added_deleted_icon(),
+            conflicted_icon: Self::default_conflicted_icon(),
+
+            behind_icon: Self::default_behind_icon(),
+            ahead_icon: Self::default_ahead_icon(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigClean {
+    #[serde(default = "ConfigClean::default_background")]
+    pub background: String,
+
+    #[serde(default = "ConfigClean::default_foreground")]
+    pub foreground: String,
+}
+
+impl ConfigClean {
+    fn default_background() -> String {
+        "green".to_string()
+    }
+
+    fn default_foreground() -> String {
+        "black".to_string()
+    }
+}
+
+impl Default for ConfigClean {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigUnstaged {
+    #[serde(default = "ConfigUnstaged::default_background")]
+    pub background: String,
+
+    #[serde(default = "ConfigUnstaged::default_foreground")]
+    pub foreground: String,
+}
+
+impl ConfigUnstaged {
+    fn default_background() -> String {
+        "green".to_string()
+    }
+
+    fn default_foreground() -> String {
+        "black".to_string()
+    }
+}
+
+impl Default for ConfigUnstaged {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigStaged {
+    #[serde(default = "ConfigStaged::default_background")]
+    pub background: String,
+
+    #[serde(default = "ConfigStaged::default_foreground")]
+    pub foreground: String,
+}
+
+impl ConfigStaged {
+    fn default_background() -> String {
+        "green".to_string()
+    }
+
+    fn default_foreground() -> String {
+        "black".to_string()
+    }
+}
+
+impl Default for ConfigStaged {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigConflicted {
+    #[serde(default = "ConfigConflicted::default_background")]
+    pub background: String,
+
+    #[serde(default = "ConfigConflicted::default_foreground")]
+    pub foreground: String,
+}
+
+impl ConfigConflicted {
+    fn default_background() -> String {
+        "green".to_string()
+    }
+
+    fn default_foreground() -> String {
+        "black".to_string()
+    }
+}
+
+impl Default for ConfigConflicted {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+        }
+    }
+}
 
 fn get_repository_statuses(repo: &Repository) -> Status {
     let mut status_options = StatusOptions::new();
@@ -14,7 +234,7 @@ fn get_repository_statuses(repo: &Repository) -> Status {
 }
 
 fn get_segment_colors<'config>(
-    config: &'config GitHeadStatusConfig,
+    config: &'config Config,
     statuses: &Status,
 ) -> (&'config str, &'config str) {
     let conflicted_statuses = Status::CONFLICTED;
@@ -51,12 +271,7 @@ fn find_tag<'repo>(repo: &'repo Repository, oid: &Oid) -> Option<Reference<'repo
         .next()
 }
 
-fn write_head(
-    segment: &mut String,
-    config: &GitHeadStatusConfig,
-    repo: &Repository,
-    head: Option<&Reference>,
-) {
+fn write_head(segment: &mut String, config: &Config, repo: &Repository, head: Option<&Reference>) {
     let branch_icon = &config.branch_icon;
     let tag_icon = &config.tag_icon;
     let commit_icon = &config.commit_icon;
@@ -105,7 +320,7 @@ fn write_head(
     *segment += &format!("{} {}", commit_icon, hash_str);
 }
 
-fn write_status_icons(segment: &mut String, config: &GitHeadStatusConfig, statuses: &Status) {
+fn write_status_icons(segment: &mut String, config: &Config, statuses: &Status) {
     let modified_statuses = Status::INDEX_MODIFIED
         | Status::INDEX_RENAMED
         | Status::INDEX_TYPECHANGE
@@ -144,7 +359,7 @@ fn write_status_icons(segment: &mut String, config: &GitHeadStatusConfig, status
 
 fn try_write_remote_status(
     segment: &mut String,
-    config: &GitHeadStatusConfig,
+    config: &Config,
     repo: &Repository,
     head: Option<&Reference>,
 ) -> Option<()> {
@@ -175,7 +390,7 @@ fn try_write_remote_status(
 
 fn write_remote_status(
     segment: &mut String,
-    config: &GitHeadStatusConfig,
+    config: &Config,
     repo: &Repository,
     head: Option<&Reference>,
 ) {
@@ -184,7 +399,7 @@ fn write_remote_status(
 
 pub fn prompt_subsegment<W: Write>(
     p: &mut Prompt<W>,
-    config: &GitHeadStatusConfig,
+    config: &Config,
     repo: &Repository,
 ) -> Result<(), PromptError> {
     if !config.display {
