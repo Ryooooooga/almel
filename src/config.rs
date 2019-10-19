@@ -50,13 +50,7 @@ pub struct DirConfig {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct GitHeadStatusConfigClean {
-    pub background: String,
-    pub foreground: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GitHeadStatusConfigConflicted {
+pub struct GitHeadStatusConfigColors {
     pub background: String,
     pub foreground: String,
 }
@@ -64,8 +58,22 @@ pub struct GitHeadStatusConfigConflicted {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GitHeadStatusConfig {
     pub display: bool,
-    pub clean: GitHeadStatusConfigClean,
-    pub conflicted: GitHeadStatusConfigConflicted,
+    pub clean: GitHeadStatusConfigColors,
+    pub unstaged: GitHeadStatusConfigColors,
+    pub staged: GitHeadStatusConfigColors,
+    pub conflicted: GitHeadStatusConfigColors,
+
+    pub branch_icon: String,
+    pub tag_icon: String,
+    pub commit_icon: String,
+    pub commit_hash_len: u32,
+
+    pub modified_icon: String,
+    pub added_icon: String,
+    pub deleted_icon: String,
+    pub added_deleted_icon: String,
+    pub conflicted_icon: String,
+
     pub behind_icon: String,
     pub ahead_icon: String,
 }
