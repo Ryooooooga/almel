@@ -108,8 +108,6 @@ impl<'w, W: io::Write> Prompt<'w, W> {
         self.write_segment_separator("default", "default")?;
         self.current_bg = None;
 
-        write!(self.output, " ")?;
-
         Ok(())
     }
 }
@@ -125,6 +123,7 @@ pub fn prompt(shell: Shell) -> Result<(), PromptError> {
     }
 
     p.close_segments()?;
+    p.write(" ")?;
 
     Ok(())
 }
