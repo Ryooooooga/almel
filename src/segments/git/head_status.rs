@@ -151,7 +151,7 @@ pub struct ConfigUnstaged {
 
 impl ConfigUnstaged {
     fn default_background() -> String {
-        "green".to_string()
+        "yellow".to_string()
     }
 
     fn default_foreground() -> String {
@@ -207,7 +207,7 @@ pub struct ConfigConflicted {
 
 impl ConfigConflicted {
     fn default_background() -> String {
-        "green".to_string()
+        "red".to_string()
     }
 
     fn default_foreground() -> String {
