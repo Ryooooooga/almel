@@ -1,6 +1,6 @@
 [package]
 name = "almel"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Ryooooooga <ryoga_314@yahoo.co.jp>"]
 description = "A ZSH theme inspired by agnoster-zsh-theme"
 edition = "2018"
