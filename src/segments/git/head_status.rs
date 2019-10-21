@@ -26,7 +26,7 @@ pub struct Config {
     #[serde(default = "Config::default_commit_icon")]
     pub commit_icon: String,
     #[serde(default = "Config::default_commit_hash_len")]
-    pub commit_hash_len: u32,
+    pub commit_hash_len: usize,
 
     #[serde(default = "Config::default_modified_icon")]
     pub modified_icon: String,
@@ -58,7 +58,7 @@ impl Config {
     fn default_commit_icon() -> String {
         "\u{f417}".to_string() // nf-oct-git_commit
     }
-    fn default_commit_hash_len() -> u32 {
+    fn default_commit_hash_len() -> usize {
         6
     }
     fn default_modified_icon() -> String {
@@ -315,7 +315,7 @@ fn write_head(segment: &mut String, config: &Config, repo: &Repository, head: Op
 
     // HEAD is a commit
     let mut hash_str = oid.to_string();
-    hash_str.truncate(config.commit_hash_len as usize);
+    hash_str.truncate(config.commit_hash_len);
 
     *segment += &format!("{} {}", commit_icon, hash_str);
 }
