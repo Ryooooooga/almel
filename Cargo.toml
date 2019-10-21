@@ -3,6 +3,9 @@ name = "almel"
 version = "1.0.0"
 authors = ["Ryooooooga <ryoga_314@yahoo.co.jp>"]
 description = "A ZSH theme inspired by agnoster-zsh-theme"
+license = "MIT"
+repository = "https://github.com/Ryooooooga/almel"
+keywords = ["zsh", "prompt"]
 edition = "2018"
 
 [dependencies]
