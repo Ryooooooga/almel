@@ -22,7 +22,10 @@ version: 1.0
 # dir:
 #   background: "blue"
 #   foreground: "black"
-#   shrink_path: false # TODO
+#   home: "~"
+#   shrink_path:
+#     enable: true # TODO
+#     max_len: 1
 #
 # git:
 #   head_status:
