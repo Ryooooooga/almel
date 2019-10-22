@@ -12,4 +12,10 @@ impl Shell {
             _ => Err(Error::UnsupportedShell(shell_name.to_string())),
         }
     }
+
+    pub fn init_script(&self) -> &'static str {
+        match self {
+            Self::Zsh => include_str!("init.zsh"),
+        }
+    }
 }
