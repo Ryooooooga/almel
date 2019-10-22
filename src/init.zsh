@@ -1,16 +1,17 @@
 unsetopt prompt_subst;
 
-preexec() {
+almel_preexec() {
 }
 
-precmd_almel() {
+almel_precmd() {
     PROMPT="$(exit_status="$?" jobs=$(jobs) almel prompt zsh)"
 }
 
-for s in "${precmd_functions[@]}"; do
-    if [ "$s" = precmd_almel ]; then
-        return
-    fi
-done
+almel_setup() {
+    autoload -Uz add-zsh-hook
 
-precmd_functions+=(precmd_almel)
+    add-zsh-hook precmd almel_precmd
+    add-zsh-hook preexec almel_preexec
+}
+
+almel_setup
