@@ -1,8 +1,7 @@
-use failure::Fail;
+use failure::{Error, Fail};
 use std::io;
 
-use crate::config::{Config, ConfigError, SegmentSeparators};
-use crate::env;
+use crate::config::{Config, SegmentSeparators};
 use crate::segments;
 use crate::shell::Shell;
 
@@ -11,40 +10,13 @@ pub enum PromptError {
     #[fail(display = "Unknown segment name: {}", 0)]
     UnknownSegment(String),
 
-    #[fail(display = "Config error: {}", 0)]
-    ConfigError(ConfigError),
-
     #[fail(display = "IO Error: {}", 0)]
     IOError(io::Error),
-
-    #[fail(display = "Env error: {}", 0)]
-    EnvError(env::EnvError),
-
-    #[fail(display = "Git error: {}", 0)]
-    GitError(git2::Error),
 }
 
 impl From<io::Error> for PromptError {
     fn from(err: io::Error) -> PromptError {
         PromptError::IOError(err)
-    }
-}
-
-impl From<ConfigError> for PromptError {
-    fn from(err: ConfigError) -> PromptError {
-        PromptError::ConfigError(err)
-    }
-}
-
-impl From<env::EnvError> for PromptError {
-    fn from(err: env::EnvError) -> PromptError {
-        PromptError::EnvError(err)
-    }
-}
-
-impl From<git2::Error> for PromptError {
-    fn from(err: git2::Error) -> PromptError {
-        PromptError::GitError(err)
     }
 }
 
@@ -112,7 +84,7 @@ impl<'w, W: io::Write> Prompt<'w, W> {
     }
 }
 
-pub fn prompt(shell: Shell) -> Result<(), PromptError> {
+pub fn prompt(shell: Shell) -> Result<(), Error> {
     let config = Config::load_from_file_or_create()?;
 
     let mut buffer = std::io::stdout();
