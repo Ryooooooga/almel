@@ -22,6 +22,6 @@ pub fn prompt_segment<W: io::Write>(
         "git" => git::prompt_segment(p, &config.git),
         "status" => status::prompt_segment(p, &config.status),
         "newline" => newline::prompt_segment(p, &config.newline),
-        _ => panic!("unknown segment '{}'", segment_name),
+        _ => Err(PromptError::UnknownSegment(segment_name.to_string())),
     }
 }

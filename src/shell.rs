@@ -1,4 +1,10 @@
-use crate::Error;
+use failure::Fail;
+
+#[derive(Debug, Fail)]
+pub enum ShellError {
+    #[fail(display = "Unsupported shell '{}'", 0)]
+    UnsupportedShell(String),
+}
 
 #[derive(Debug, PartialEq)]
 pub enum Shell {
@@ -6,10 +12,10 @@ pub enum Shell {
 }
 
 impl Shell {
-    pub fn from_name(shell_name: &str) -> Result<Shell, Error> {
+    pub fn from_name(shell_name: &str) -> Result<Shell, ShellError> {
         match shell_name {
             "zsh" => Ok(Shell::Zsh),
-            _ => Err(Error::UnsupportedShell(shell_name.to_string())),
+            _ => Err(ShellError::UnsupportedShell(shell_name.to_string())),
         }
     }
 
