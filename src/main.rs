@@ -1,5 +1,4 @@
 mod config;
-mod env;
 mod init;
 mod prompt;
 mod segments;

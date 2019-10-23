@@ -1,11 +1,11 @@
 use failure::Fail;
 use serde::{Deserialize, Serialize};
+use std::env;
 use std::fs;
 use std::io;
 use std::io::prelude::Write;
 use std::path::Path;
 
-use crate::env;
 use crate::segments::dir;
 use crate::segments::git;
 use crate::segments::newline;

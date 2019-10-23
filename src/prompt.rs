@@ -2,7 +2,6 @@ use failure::{Error, Fail};
 use std::io;
 
 use crate::config::{Config, SegmentSeparators};
-use crate::env;
 use crate::segments;
 use crate::shell::Shell;
 
@@ -13,20 +12,11 @@ pub enum PromptError {
 
     #[fail(display = "IO Error: {}", 0)]
     IOError(io::Error),
-
-    #[fail(display = "Env error: {}", 0)]
-    EnvError(env::EnvError),
 }
 
 impl From<io::Error> for PromptError {
     fn from(err: io::Error) -> PromptError {
         PromptError::IOError(err)
-    }
-}
-
-impl From<env::EnvError> for PromptError {
-    fn from(err: env::EnvError) -> PromptError {
-        PromptError::EnvError(err)
     }
 }
 

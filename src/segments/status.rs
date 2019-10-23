@@ -1,9 +1,10 @@
+use failure::Error;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
+use std::env;
 use std::io;
 
-use crate::env;
-use crate::prompt::{Prompt, PromptError};
+use crate::prompt::Prompt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -121,7 +122,7 @@ impl Default for Config {
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), PromptError> {
+pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
     let exit_status = env::var("exit_status")?.parse::<i32>().unwrap_or(-1);
     let uid = users::get_current_uid();
     let jobs = env::var("jobs")?;
