@@ -1,6 +1,6 @@
 use crate::Error;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Shell {
     Zsh,
 }
@@ -17,5 +17,23 @@ impl Shell {
         match self {
             Self::Zsh => include_str!("init.zsh"),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_from_name() {
+        assert_eq!(Shell::from_name("zsh").ok(), Some(Shell::Zsh));
+        assert_eq!(Shell::from_name("csh").ok(), None);
+    }
+
+    #[test]
+    fn test_init_script() {
+        let zsh = Shell::from_name("zsh").unwrap();
+
+        assert_eq!(zsh.init_script().is_empty(), false);
     }
 }
