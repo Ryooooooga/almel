@@ -1,24 +1,9 @@
-use failure::{Error, Fail};
+use failure::Error;
 use std::io;
 
 use crate::config::{Config, SegmentSeparators};
 use crate::segments;
 use crate::shell::Shell;
-
-#[derive(Debug, Fail)]
-pub enum PromptError {
-    #[fail(display = "Unknown segment name: {}", 0)]
-    UnknownSegment(String),
-
-    #[fail(display = "IO Error: {}", 0)]
-    IOError(io::Error),
-}
-
-impl From<io::Error> for PromptError {
-    fn from(err: io::Error) -> PromptError {
-        PromptError::IOError(err)
-    }
-}
 
 pub struct Prompt<'w, W: io::Write> {
     pub shell: Shell,

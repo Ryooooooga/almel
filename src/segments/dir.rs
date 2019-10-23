@@ -1,10 +1,11 @@
 use dirs;
+use failure::Error;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::io;
 use std::path::{Path, PathBuf};
 
-use crate::prompt::{Prompt, PromptError};
+use crate::prompt::Prompt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -95,7 +96,7 @@ fn shrink_path<P: AsRef<Path>>(out: &mut PathBuf, path: P, max_len: usize) {
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), PromptError> {
+pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
     let cd = std::env::current_dir()?;
     let mut cd = cd.as_path();
 

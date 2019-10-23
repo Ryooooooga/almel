@@ -1,9 +1,10 @@
+use failure::Error;
 use git2::Repository;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::io::Write;
 
-use crate::prompt::{Prompt, PromptError};
+use crate::prompt::Prompt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -53,7 +54,7 @@ pub fn prompt_subsegment<W: Write>(
     p: &mut Prompt<W>,
     config: &Config,
     repo: &Repository,
-) -> Result<(), PromptError> {
+) -> Result<(), Error> {
     if !config.display {
         return Ok(());
     }
