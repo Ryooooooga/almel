@@ -1,8 +1,9 @@
+use failure::Error;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::io;
 
-use crate::prompt::{Prompt, PromptError};
+use crate::prompt::Prompt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -89,7 +90,7 @@ impl ConfigEntry {
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), PromptError> {
+pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
     let entry = config.entry();
 
     p.write_segment(&entry.background, &entry.foreground, &entry.icon)?;

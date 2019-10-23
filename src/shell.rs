@@ -2,7 +2,7 @@ use failure::Fail;
 
 #[derive(Debug, Fail)]
 pub enum ShellError {
-    #[fail(display = "Unsupported shell '{}'", 0)]
+    #[fail(display = "Unsupported shell {}", 0)]
     UnsupportedShell(String),
 }
 

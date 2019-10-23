@@ -1,12 +1,13 @@
 mod head_status;
 mod user;
 
+use failure::Error;
 use git2::Repository;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::io;
 
-use crate::prompt::{Prompt, PromptError};
+use crate::prompt::Prompt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -26,15 +27,12 @@ impl Default for Config {
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), PromptError> {
+pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
     // Open the current repository
-    let repo = match Repository::discover(".") {
-        Ok(repo) => repo,
-        Err(_) => return Ok(()),
-    };
-
-    head_status::prompt_subsegment(p, &config.head_status, &repo)?;
-    user::prompt_subsegment(p, &config.user, &repo)?;
+    if let Ok(repo) = Repository::discover(".") {
+        head_status::prompt_subsegment(p, &config.head_status, &repo)?;
+        user::prompt_subsegment(p, &config.user, &repo)?;
+    }
 
     Ok(())
 }
