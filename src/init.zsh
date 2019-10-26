@@ -4,7 +4,7 @@ almel_preexec() {
 }
 
 almel_precmd() {
-    PROMPT="$(exit_status="$?" jobs=$(jobs) almel prompt zsh)"
+    PROMPT="$(EXIT_STATUS="$?" JOBS=$(jobs) almel prompt zsh)"
 }
 
 almel_setup() {

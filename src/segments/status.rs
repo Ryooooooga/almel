@@ -122,16 +122,28 @@ impl Default for Config {
     }
 }
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
-    let exit_status = env::var("exit_status")?.parse::<i32>().unwrap_or(-1);
-    let uid = users::get_current_uid();
-    let jobs = env::var("jobs")?;
+#[cfg(target_os = "windows")]
+fn is_root_user() -> bool {
+    // TODO: Implement for Windows
+    false
+}
 
+#[cfg(not(target_os = "windows"))]
+fn is_root_user() -> bool {
+    users::get_current_uid() == 0
+}
+
+pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
     let mut segment = String::new();
     let background: &str;
     let foreground: &str;
 
     // Exit status
+    let exit_status = env::var("EXIT_STATUS")
+        .ok()
+        .and_then(|status| status.parse::<i32>().ok())
+        .unwrap_or(-1);
+
     if exit_status == 0 {
         // Succeeded
         background = &config.succeeded.background;
@@ -151,12 +163,14 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Resul
     }
 
     // Root user?
-    if uid == 0 {
+    if is_root_user() {
         segment += " ";
         segment += &config.root_icon;
     }
 
     // Jobs
+    let jobs = env::var("JOBS").unwrap_or_default();
+
     if !jobs.is_empty() {
         segment += " ";
         segment += &config.job_icon;
