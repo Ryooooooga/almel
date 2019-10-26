@@ -139,7 +139,10 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Resul
     let foreground: &str;
 
     // Exit status
-    let exit_status = env::var("exit_status")?.parse::<i32>().unwrap_or(-1);
+    let exit_status = env::var("EXIT_STATUS")
+        .ok()
+        .and_then(|status| status.parse::<i32>().ok())
+        .unwrap_or(-1);
 
     if exit_status == 0 {
         // Succeeded
@@ -166,7 +169,7 @@ pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Resul
     }
 
     // Jobs
-    let jobs = env::var("jobs")?;
+    let jobs = env::var("JOBS").unwrap_or_default();
 
     if !jobs.is_empty() {
         segment += " ";
