@@ -1,11 +1,13 @@
 use std::path::PathBuf;
 
+use crate::config::{Config, DEFAULT_CONFIG};
 use crate::opt::PromptArgs;
 
 #[derive(Debug)]
 pub struct Context<'ctx> {
-    current_dir: PathBuf,
-    opt: &'ctx PromptArgs,
+    pub current_dir: PathBuf,
+    pub config: Config,
+    pub opt: &'ctx PromptArgs,
 }
 
 impl<'ctx> Context<'ctx> {
@@ -15,18 +17,12 @@ impl<'ctx> Context<'ctx> {
             .or_else(|| std::env::var("PWD").ok().map(PathBuf::from))
             .expect("Could not estimate current directory");
 
-        Self { current_dir, opt }
-    }
+        let config = DEFAULT_CONFIG.clone();
 
-    pub fn get_current_dir(&self) -> &PathBuf {
-        &self.current_dir
-    }
-
-    pub fn get_exit_status(&self) -> i32 {
-        self.opt.exit_status
-    }
-
-    pub fn get_num_jobs(&self) -> i32 {
-        self.opt.num_jobs
+        Self {
+            current_dir,
+            config,
+            opt,
+        }
     }
 }
