@@ -25,28 +25,34 @@ impl Opt {
 #[derive(Debug, StructOpt)]
 pub enum Subcommand {
     #[structopt(about = "Initialize the shell prompt")]
-    Init {
-        #[structopt(
-            help = "Shell name",
-            possible_values = &Shell::possible_values(),
-            case_insensitive = true,
-        )]
-        shell: Shell,
-    },
+    Init(InitArgs),
 
     #[structopt(about = "Print the prompt")]
-    Prompt {
-        #[structopt(
+    Prompt(PromptArgs),
+}
+
+#[derive(Debug, StructOpt)]
+pub struct InitArgs {
+    #[structopt(
             help = "Shell name",
             possible_values = &Shell::possible_values(),
             case_insensitive = true,
         )]
-        shell: Shell,
+    pub shell: Shell,
+}
 
-        #[structopt(help = "Exit status", long = "exit-status", short = "s")]
-        exit_status: i32,
+#[derive(Debug, StructOpt)]
+pub struct PromptArgs {
+    #[structopt(
+            help = "Shell name",
+            possible_values = &Shell::possible_values(),
+            case_insensitive = true,
+        )]
+    pub shell: Shell,
 
-        #[structopt(help = "Number of jobs running", long = "num-jobs", short = "j")]
-        num_jobs: i32,
-    },
+    #[structopt(help = "Exit status", long = "exit-status", short = "s")]
+    pub exit_status: i32,
+
+    #[structopt(help = "Number of jobs running", long = "num-jobs", short = "j")]
+    pub num_jobs: i32,
 }

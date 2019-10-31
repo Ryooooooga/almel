@@ -18,3 +18,11 @@ impl Shell {
         &REFS
     }
 }
+
+impl Shell {
+    pub fn init_script(&self) -> &'static str {
+        match self {
+            Self::Zsh => include_str!("init.zsh"),
+        }
+    }
+}
