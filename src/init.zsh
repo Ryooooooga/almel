@@ -2,6 +2,7 @@ almel_preexec() {
 }
 
 almel_precmd() {
+    PROMPT="$(almel prompt zsh -s$? -j$#jobstetes)"
 }
 
 almel_setup() {
