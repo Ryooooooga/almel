@@ -1,3 +1,9 @@
+mod opt;
+mod shell;
+
+use opt::Opt;
+
 fn main() {
-    println!("Hello, world!");
+    let opt = Opt::parse();
+    println!("{:#?}", opt);
 }
