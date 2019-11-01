@@ -29,6 +29,38 @@ directory:
     enabled: true
     max_len: 1
 
+git_repo:
+  icons:
+    branch: "\uf418" # nf-oct-git_branch
+    tag: "\uf412" # nf-oct-tag
+    commit: "\uf417" # nf-oct-git_commit
+    modified: "…"
+    added: "+"
+    deleted: "-"
+    added_deleted: "±"
+    conflicted: "\uf47f" # nf-oct-git_compare
+    behind: "\uf175" # nf-fa-long_arrow_down
+    ahead: "\uf176" # nf-fa-long_arrow_up
+
+  clean:
+    background: 2 # green
+    foreground: 0 # black
+
+  unstaged:
+    background: 3 # yellow
+    foreground: 0 # black
+
+  staged:
+    background: 2 # green
+    foreground: 0 # black
+
+  conflicted:
+    background: 1 # red
+    foreground: 0 # black
+
+  display_tag: true
+  commit_hash_len: 6
+
 git_user:
   background: 6 # cyan
   foreground: 0 # black
@@ -50,9 +82,13 @@ status:
     foreground: 7 # white
     display_exit_status: true
 
+# segment_separators:
+#   left_solid: "\ue0b0" # nf-pl-left_hard_divider
+
 segments:
   - os
   - user
   - directory
+  - git_repo
   - git_user
   - status

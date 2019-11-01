@@ -1,4 +1,5 @@
 mod directory;
+mod git_repo;
 mod git_user;
 mod os;
 mod status;
@@ -23,6 +24,7 @@ pub fn build_segment(context: &Context, name: &str) -> Result<Option<Segment>, S
         "directory" => directory::build_segment(&context),
         "user" => user::build_segment(&context),
         "status" => status::build_segment(&context),
+        "git_repo" => git_repo::build_segment(&context),
         "git_user" => git_user::build_segment(&context),
         _ => Err(format_err!("Unknown segment: {}", name)),
     }

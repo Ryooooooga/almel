@@ -79,7 +79,39 @@ pub struct DirectoryConfigError {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DirectoryConfigShrink {
     pub enabled: bool,
-    pub max_len: u32,
+    pub max_len: usize,
+}
+
+// Git repository
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitRepoConfig {
+    pub icons: GitRepoConfigIcons,
+    pub clean: GitRepoConfigColors,
+    pub unstaged: GitRepoConfigColors,
+    pub staged: GitRepoConfigColors,
+    pub conflicted: GitRepoConfigColors,
+    pub display_tag: bool,
+    pub commit_hash_len: usize,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitRepoConfigIcons {
+    pub branch: String,
+    pub tag: String,
+    pub commit: String,
+    pub modified: String,
+    pub added: String,
+    pub deleted: String,
+    pub added_deleted: String,
+    pub conflicted: String,
+    pub behind: String,
+    pub ahead: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitRepoConfigColors {
+    pub background: Color,
+    pub foreground: Color,
 }
 
 // Git user
@@ -95,6 +127,7 @@ pub struct Config {
     pub os: OsConfig,
     pub user: UserConfig,
     pub directory: DirectoryConfig,
+    pub git_repo: GitRepoConfig,
     pub git_user: GitUserConfig,
     pub status: StatusConfig,
     pub segments: Vec<String>,
