@@ -1,7 +1,7 @@
 use crate::context::{Color, Context};
 use crate::segments::{Segment, SegmentError};
 
-pub fn build_segment(context: &Context) -> Result<Segment, SegmentError> {
+pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.status;
 
     let background: Color;
@@ -28,9 +28,9 @@ pub fn build_segment(context: &Context) -> Result<Segment, SegmentError> {
         content += &format!(" {}", config.icons.jobs);
     }
 
-    Ok(Segment {
+    Ok(Some(Segment {
         background,
         foreground,
         content,
-    })
+    }))
 }

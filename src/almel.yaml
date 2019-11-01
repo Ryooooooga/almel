@@ -17,6 +17,23 @@ user:
   foreground: 7 # white
   display_host: true
 
+directory:
+  home: "~"
+  normal:
+    background: 4 # blue
+    foreground: 0 # black
+  error:
+    background: 1 # red
+    foreground: 0 # black
+  shrink:
+    enabled: true
+    max_len: 1
+
+git_user:
+  background: 6 # cyan
+  foreground: 0 # black
+  icon: "\uf2c0" # nf-fa-user_o
+
 status:
   icons:
     succeeded: "\uf62b" # nf-mdi-check
@@ -37,4 +54,5 @@ segments:
   - os
   - user
   - directory
+  - git_user
   - status

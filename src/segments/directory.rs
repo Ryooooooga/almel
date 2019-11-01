@@ -1,23 +1,24 @@
 use crate::context::{Color, Context};
 use crate::segments::{Segment, SegmentError};
 
-pub fn build_segment(context: &Context) -> Result<Segment, SegmentError> {
+pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+    let config = &context.config.directory;
     let cwd = &context.current_dir;
 
     let background: Color;
     let foreground: Color;
 
     if cwd.is_dir() {
-        background = 1;
-        foreground = 0;
+        background = config.normal.background;
+        foreground = config.normal.foreground;
     } else {
-        background = 3;
-        foreground = 0;
+        background = config.error.background;
+        foreground = config.error.foreground;
     }
 
-    Ok(Segment {
+    Ok(Some(Segment {
         background,
         foreground,
         content: cwd.to_string_lossy().to_string(),
-    })
+    }))
 }

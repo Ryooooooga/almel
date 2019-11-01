@@ -1,16 +1,18 @@
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
-pub fn build_segment(context: &Context) -> Result<Segment, SegmentError> {
-    let content = if context.config.user.display_host {
+pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+    let config = &context.config.user;
+
+    let content = if config.display_host {
         "%n@%m".to_string()
     } else {
         "%n".to_string()
     };
 
-    Ok(Segment {
-        background: 0,
-        foreground: 7,
+    Ok(Some(Segment {
+        background: config.background,
+        foreground: config.foreground,
         content,
-    })
+    }))
 }

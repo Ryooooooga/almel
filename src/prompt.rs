@@ -9,10 +9,11 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
 
     for name in &context.config.segments {
         match segments::build_segment(&context, name) {
-            Ok(segment) => print!(
+            Ok(Some(segment)) => print!(
                 "%{{%K{{{}}}%F{{{}}}%}} {} %{{%K{{default}}%F{{default}}%}}",
                 segment.background, segment.foreground, segment.content
             ),
+            Ok(None) => {}
             Err(error) => {
                 eprintln!("{}", error);
             }

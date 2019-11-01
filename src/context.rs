@@ -1,4 +1,5 @@
 use failure::Error;
+use git2::Repository;
 use std::path::PathBuf;
 
 use crate::config::{Config, DEFAULT_CONFIG_STR};
@@ -6,11 +7,11 @@ use crate::opt::PromptArgs;
 
 pub type Color = u8;
 
-#[derive(Debug)]
 pub struct Context<'ctx> {
     pub current_dir: PathBuf,
     pub config: Config,
     pub opt: &'ctx PromptArgs,
+    pub git_repo: Option<Repository>,
 }
 
 impl<'ctx> Context<'ctx> {
@@ -22,10 +23,13 @@ impl<'ctx> Context<'ctx> {
 
         let config = Config::load_from_str(&DEFAULT_CONFIG_STR)?;
 
+        let git_repo = Repository::discover(&current_dir).ok();
+
         Ok(Self {
             current_dir,
             config,
             opt,
+            git_repo,
         })
     }
 }

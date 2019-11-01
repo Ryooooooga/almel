@@ -55,10 +55,47 @@ pub struct StatusConfigFailed {
     pub display_exit_status: bool,
 }
 
+// Directory
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DirectoryConfig {
+    pub normal: DirectoryConfigNormal,
+    pub error: DirectoryConfigError,
+    pub home: String,
+    pub shrink: DirectoryConfigShrink,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DirectoryConfigNormal {
+    pub background: Color,
+    pub foreground: Color,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DirectoryConfigError {
+    pub background: Color,
+    pub foreground: Color,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DirectoryConfigShrink {
+    pub enabled: bool,
+    pub max_len: u32,
+}
+
+// Git user
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GitUserConfig {
+    pub background: Color,
+    pub foreground: Color,
+    pub icon: String,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub os: OsConfig,
     pub user: UserConfig,
+    pub directory: DirectoryConfig,
+    pub git_user: GitUserConfig,
     pub status: StatusConfig,
     pub segments: Vec<String>,
 }
