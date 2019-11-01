@@ -2,7 +2,9 @@ almel_preexec() {
 }
 
 almel_precmd() {
-    PROMPT="$(almel prompt zsh -s$? -j$#jobstetes)"
+    STATUS=$?
+    NUM_JOBS=$#jobstates
+    PROMPT="$(almel prompt zsh -s$STATUS -j$NUM_JOBS)"
 }
 
 almel_setup() {

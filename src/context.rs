@@ -4,6 +4,8 @@ use std::path::PathBuf;
 use crate::config::{Config, DEFAULT_CONFIG_STR};
 use crate::opt::PromptArgs;
 
+pub type Color = u8;
+
 #[derive(Debug)]
 pub struct Context<'ctx> {
     pub current_dir: PathBuf,

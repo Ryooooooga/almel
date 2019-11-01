@@ -1,18 +1,18 @@
 mod directory;
-mod host;
 mod os;
 mod status;
+mod user;
 
 use failure::{format_err, Error};
 
-use crate::context::Context;
+use crate::context::{Color, Context};
 
 type SegmentError = Error;
 
 #[derive(Debug)]
 pub struct Segment {
-    pub foreground: i32,
-    pub background: i32,
+    pub background: Color,
+    pub foreground: Color,
     pub content: String,
 }
 
@@ -20,7 +20,7 @@ pub fn build_segment(context: &Context, name: &str) -> Result<Segment, SegmentEr
     match name {
         "os" => os::build_segment(&context),
         "directory" => directory::build_segment(&context),
-        "host" => host::build_segment(&context),
+        "user" => user::build_segment(&context),
         "status" => status::build_segment(&context),
         _ => Err(format_err!("Unknown segment: {}", name)),
     }

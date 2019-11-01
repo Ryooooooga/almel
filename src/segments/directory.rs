@@ -1,11 +1,11 @@
-use crate::context::Context;
+use crate::context::{Color, Context};
 use crate::segments::{Segment, SegmentError};
 
 pub fn build_segment(context: &Context) -> Result<Segment, SegmentError> {
     let cwd = &context.current_dir;
 
-    let background: i32;
-    let foreground: i32;
+    let background: Color;
+    let foreground: Color;
 
     if cwd.is_dir() {
         background = 1;

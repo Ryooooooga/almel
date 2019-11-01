@@ -1,0 +1,40 @@
+os:
+  linux:
+    background: 6 # cyan
+    foreground: 7 # white
+    icon: "\uf17c" # nf-fa-linux
+  mac:
+    background: 6 # cyan
+    foreground: 7 # white
+    icon: "\uf179" # nf-fa-apple
+  windows:
+    background: 6 # cyan
+    foreground: 7 # white
+    icon: "\uf17a" # nf-fa-windows
+
+user:
+  background: 0 # black
+  foreground: 7 # white
+  display_host: true
+
+status:
+  icons:
+    succeeded: "\uf62b" # nf-mdi-check
+    failed: "\uf06a" # nf-fa-exclamation_circle
+    root: "\ue00a" # nf-pom-external_interruption
+    jobs: "\uf013" # nf-fa-gear
+
+  succeeded:
+    background: 7 # white
+    foreground: 4 # blue
+
+  failed:
+    background: 1 # red
+    foreground: 7 # white
+    display_exit_status: true
+
+segments:
+  - os
+  - user
+  - directory
+  - status
