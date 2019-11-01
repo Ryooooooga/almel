@@ -3,11 +3,14 @@ mod context;
 mod init;
 mod opt;
 mod prompt;
+mod segments;
 mod shell;
 
-use opt::{Opt, Subcommand};
+use failure::Error;
 
-fn main() {
+use crate::opt::{Opt, Subcommand};
+
+fn main() -> Result<(), Error> {
     let opt = Opt::parse();
 
     match &opt.subcommand {

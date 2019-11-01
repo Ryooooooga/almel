@@ -13,6 +13,5 @@ impl Config {
 }
 
 lazy_static! {
-    pub static ref DEFAULT_CONFIG: Config =
-        Config::load_from_str(include_str!("config.yaml")).expect("Wrong config.yaml!");
+    pub static ref DEFAULT_CONFIG_STR: &'static str = include_str!("config.yaml");
 }
