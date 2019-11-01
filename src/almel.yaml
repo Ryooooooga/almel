@@ -86,9 +86,9 @@ status:
 #   left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
 segments:
-  - os
-  - user
-  - directory
-  - git_repo
-  - git_user
-  - status
+  - - os
+    - user
+    - directory
+    - git_repo
+    - git_user
+  - - status

@@ -130,7 +130,7 @@ pub struct Config {
     pub git_repo: GitRepoConfig,
     pub git_user: GitUserConfig,
     pub status: StatusConfig,
-    pub segments: Vec<String>,
+    pub segments: Vec<Vec<String>>,
 }
 
 impl Config {
