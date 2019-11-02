@@ -1,4 +1,4 @@
-use git2::{Oid, Reference, Repository, Status, StatusOptions};
+use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use lazy_static::lazy_static;
 
 use crate::config::{GitRepoConfig, GitRepoConfigColors};
@@ -103,6 +103,34 @@ fn build_status_icons(config: &GitRepoConfig, statuses: &Status) -> String {
     icons
 }
 
+fn build_remote_status<'a>(
+    config: &GitRepoConfig,
+    repo: &'a Repository,
+    head: &Option<Reference<'a>>,
+) -> Option<String> {
+    let head = head.as_ref()?;
+    let branch_name = head.shorthand()?;
+
+    let local_branch = repo.find_branch(branch_name, BranchType::Local).ok()?;
+    let upstream_branch = local_branch.upstream().ok()?;
+
+    let local_oid = head.target()?;
+    let upstream_oid = upstream_branch.get().target()?;
+
+    let (ahead, behind) = repo.graph_ahead_behind(local_oid, upstream_oid).ok()?;
+
+    let mut status = String::new();
+
+    if behind != 0 {
+        status += &format!("{}{}", config.icons.behind, behind);
+    }
+    if ahead != 0 {
+        status += &format!("{}{}", config.icons.ahead, ahead);
+    }
+
+    Some(status)
+}
+
 fn get_colors<'a>(config: &'a GitRepoConfig, statuses: &Status) -> &'a GitRepoConfigColors {
     if statuses.intersects(*STATUS_CONFLICTED) {
         &config.conflicted
@@ -128,13 +156,17 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
 
     let head_name = build_head_name(config, repo, &head);
     let status_icons = build_status_icons(config, &statuses);
-    // TODO: remote
+    let remote_status = build_remote_status(config, &repo, &head);
 
     // Build content
     let mut content = head_name;
 
     if !status_icons.is_empty() {
         content += &format!(" {}", status_icons);
+    }
+
+    if let Some(remote_status) = remote_status {
+        content += &format!(" {}", remote_status);
     }
 
     let colors = get_colors(config, &statuses);
