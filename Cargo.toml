@@ -10,6 +10,7 @@ keywords = ["zsh", "prompt"]
 edition = "2018"
 
 [dependencies]
+chrono = "0.3.0"
 dirs = "2.0"
 failure = "0.1.6"
 git2 = "0.10.1"

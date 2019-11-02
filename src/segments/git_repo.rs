@@ -128,6 +128,7 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
 
     let head_name = build_head_name(config, repo, &head);
     let status_icons = build_status_icons(config, &statuses);
+    // TODO: remote
 
     // Build content
     let mut content = head_name;

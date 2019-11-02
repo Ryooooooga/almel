@@ -5,6 +5,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let config = &context.config.directory;
     let cwd = &context.current_dir;
 
+    // TODO: home
+    // TODO: shrinking
+
     let background: Color;
     let foreground: Color;
 

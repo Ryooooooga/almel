@@ -91,4 +91,5 @@ segments:
     - directory
     - git_repo
     - git_user
+    - time
   - - status
