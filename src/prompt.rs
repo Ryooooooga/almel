@@ -1,11 +1,13 @@
 use failure::Error;
 
+use crate::config::Config;
 use crate::context::Context;
 use crate::opt::PromptArgs;
 use crate::segments;
 
 pub fn run(args: &PromptArgs) -> Result<(), Error> {
-    let context = Context::new(args)?;
+    let config = Config::load_from_file_or_create_default(Config::config_path())?;
+    let context = Context::new(args, &config)?;
 
     for (i, line) in context.config.segments.iter().enumerate() {
         if i > 0 {

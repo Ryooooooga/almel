@@ -89,8 +89,8 @@ time:
   format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
   utc: false
 
-# segment_separators:
-#   left_solid: "\ue0b0" # nf-pl-left_hard_divider
+segment_separators:
+  left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
 segments:
   - - os

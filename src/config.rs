@@ -1,5 +1,9 @@
+use failure::Error;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
+use std::fs::{create_dir_all, File};
+use std::io::prelude::Write; // File#write_all
+use std::path::{Path, PathBuf};
 
 use crate::context::Color;
 
@@ -144,12 +148,69 @@ pub struct Config {
     pub segments: Vec<Vec<String>>,
 }
 
+type ConfigError = Error;
+
 impl Config {
-    pub fn load_from_str(s: &str) -> serde_yaml::Result<Config> {
-        serde_yaml::from_str(s)
+    pub fn load_from_str(s: &str) -> Result<Self, ConfigError> {
+        let config = serde_yaml::from_str(s)?;
+
+        Ok(config)
+    }
+
+    pub fn load_from_file(file: &File) -> Result<Self, ConfigError> {
+        let config = serde_yaml::from_reader(file)?;
+
+        Ok(config)
+    }
+
+    fn save_default_config<P: AsRef<Path>>(config_path: P) -> Result<(), ConfigError> {
+        let config_path = config_path.as_ref();
+
+        if let Some(config_dir) = config_path.parent() {
+            create_dir_all(config_dir)?;
+        }
+
+        let mut config_file = File::create(config_path)?;
+        config_file.write_all(DEFAULT_CONFIG_STR.as_bytes())?;
+
+        Ok(())
+    }
+
+    pub fn load_from_file_or_create_default<P: AsRef<Path>>(
+        config_path: P,
+    ) -> Result<Config, ConfigError> {
+        if let Ok(config_file) = File::open(&config_path) {
+            let config = Self::load_from_file(&config_file)?;
+
+            Ok(config)
+        } else {
+            // No config file
+            let _ = Self::save_default_config(&config_path); // Ignore error
+            let config = Self::load_from_str(&DEFAULT_CONFIG_STR)?;
+
+            Ok(config)
+        }
+    }
+
+    pub fn config_path() -> PathBuf {
+        if let Ok(path) = std::env::var("ALMEL_CONFIG_PATH").map(PathBuf::from) {
+            path
+        } else if let Ok(config_home) = std::env::var("XDG_CONFIG_HOME").map(PathBuf::from) {
+            let mut path = config_home;
+            path.push("almel/almel.yaml");
+
+            path
+        } else if let Some(home) = dirs::home_dir() {
+            let mut path = home;
+            path.push(".config/almel/almel.yaml");
+
+            path
+        } else {
+            PathBuf::from("~/.config/almel/almel.yaml")
+        }
     }
 }
 
 lazy_static! {
-    pub static ref DEFAULT_CONFIG_STR: &'static str = include_str!("almel.yaml");
+    static ref DEFAULT_CONFIG_STR: &'static str = include_str!("almel.yaml");
 }
