@@ -136,6 +136,12 @@ pub struct GitUserConfig {
     pub icon: String,
 }
 
+// Separators
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigSegmentSeparators {
+    pub left_solid: String,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub os: OsConfig,
@@ -145,6 +151,7 @@ pub struct Config {
     pub git_user: GitUserConfig,
     pub status: StatusConfig,
     pub time: TimeConfig,
+    pub segment_separators: ConfigSegmentSeparators,
     pub segments: Vec<Vec<String>>,
 }
 
