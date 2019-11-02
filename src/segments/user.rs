@@ -3,11 +3,12 @@ use crate::segments::{Segment, SegmentError};
 
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.user;
+    let shell = &context.opt.shell;
 
     let content = if config.display_host {
-        "%n@%m".to_string()
+        format!("{}@{}", shell.username(), shell.hostname())
     } else {
-        "%n".to_string()
+        format!("{}", shell.username())
     };
 
     Ok(Some(Segment {
