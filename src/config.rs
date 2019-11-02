@@ -82,6 +82,15 @@ pub struct DirectoryConfigShrink {
     pub max_len: usize,
 }
 
+// Time
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TimeConfig {
+    pub background: Color,
+    pub foreground: Color,
+    pub icon: String,
+    pub format: String,
+}
+
 // Git repository
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GitRepoConfig {
@@ -130,6 +139,7 @@ pub struct Config {
     pub git_repo: GitRepoConfig,
     pub git_user: GitUserConfig,
     pub status: StatusConfig,
+    pub time: TimeConfig,
     pub segments: Vec<Vec<String>>,
 }
 

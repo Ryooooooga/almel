@@ -82,6 +82,12 @@ status:
     foreground: 7 # white
     display_exit_status: true
 
+time:
+  background: 8 # gray
+  foreground: 7 # white
+  icon: "\uf64f" # nf-mdi-clock
+  format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
+
 # segment_separators:
 #   left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
@@ -91,5 +97,5 @@ segments:
     - directory
     - git_repo
     - git_user
-    - time
-  - - status
+  - - time
+    - status
