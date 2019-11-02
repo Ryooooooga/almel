@@ -1,14 +1,22 @@
 use crate::context::{Color, Context};
 use crate::segments::{Segment, SegmentError};
 
+#[cfg(taget_os = "windows")]
+fn is_root_user() -> bool {
+    false // TODO: for Windows
+}
+
+#[cfg(not(taget_os = "windows"))]
+fn is_root_user() -> bool {
+    users::get_current_uid() == 0
+}
+
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.status;
 
     let background: Color;
     let foreground: Color;
     let mut content = String::new();
-
-    // TODO: is root
 
     if context.opt.exit_status == 0 {
         background = config.succeeded.background;
@@ -22,6 +30,10 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         if config.failed.display_exit_status {
             content += &format!(" {}", context.opt.exit_status);
         }
+    }
+
+    if is_root_user() {
+        content += &format!(" {}", config.icons.root);
     }
 
     if context.opt.num_jobs > 0 {

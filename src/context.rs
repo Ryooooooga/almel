@@ -21,6 +21,7 @@ impl<'ctx> Context<'ctx> {
             .or_else(|| std::env::var("PWD").ok().map(PathBuf::from))
             .expect("Could not estimate current directory");
 
+        // TODO: config
         let config = Config::load_from_str(&DEFAULT_CONFIG_STR)?;
 
         let git_repo = Repository::discover(&current_dir).ok();
