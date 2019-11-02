@@ -206,7 +206,7 @@ impl Config {
 
             path
         } else {
-            PathBuf::from("~/.config/almel/almel.yaml")
+            PathBuf::from("/etc/almel/almel.yaml")
         }
     }
 }
