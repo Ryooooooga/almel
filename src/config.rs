@@ -89,6 +89,7 @@ pub struct TimeConfig {
     pub foreground: Color,
     pub icon: String,
     pub format: String,
+    pub utc: bool,
 }
 
 // Git repository
