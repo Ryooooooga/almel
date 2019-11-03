@@ -1,6 +1,6 @@
 # Almel
 
-[![](https://badgen.net/crates/v/almel)](https://crates.io/crates/almel)
+<a href="https://crates.io/crates/almel"><img src="https://badgen.net/crates/v/almel"></a>
 
 A ZSH theme inspired by [agnoster-zsh-theme](https://github.com/agnoster/agnoster-zsh-theme), written in Rust.
 
