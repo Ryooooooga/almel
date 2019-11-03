@@ -6,17 +6,16 @@ use crate::segments::{Segment, SegmentError};
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.time;
 
-    let time;
-
+    let content;
     if config.utc {
-        time = UTC::now().format(&config.format);
+        content = UTC::now().format(&config.format).to_string();
     } else {
-        time = Local::now().format(&config.format);
+        content = Local::now().format(&config.format).to_string();
     }
 
     Ok(Some(Segment {
         background: config.background,
         foreground: config.foreground,
-        content: format!("{} {}", config.icon, time),
+        content,
     }))
 }

@@ -55,4 +55,7 @@ pub struct PromptArgs {
 
     #[structopt(help = "Number of jobs running", long = "num-jobs", short = "j")]
     pub num_jobs: i32,
+
+    #[structopt(help = "Command duration", long = "duration", short = "d")]
+    pub duration: f64,
 }

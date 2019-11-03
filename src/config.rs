@@ -512,9 +512,6 @@ pub struct TimeConfig {
     #[serde(default = "TimeConfig::default_foreground")]
     pub foreground: Color,
 
-    #[serde(default = "TimeConfig::default_icon")]
-    pub icon: String,
-
     #[serde(default = "TimeConfig::default_format")]
     pub format: String,
 
@@ -528,11 +525,9 @@ impl TimeConfig {
     fn default_foreground() -> Color {
         color::WHITE
     }
-    fn default_icon() -> String {
-        "\u{f017}".to_string() // nf-fa-clock_o
-    }
     fn default_format() -> String {
-        "%Y/%m/%d %H:%M:%S%.3f".to_string()
+        // nf-fa-clock_o
+        "\u{f017} %Y/%m/%d %H:%M:%S".to_string()
     }
     fn default_utc() -> bool {
         false
@@ -543,9 +538,41 @@ impl Default for TimeConfig {
         Self {
             background: Self::default_background(),
             foreground: Self::default_foreground(),
-            icon: Self::default_icon(),
             format: Self::default_format(),
             utc: Self::default_utc(),
+        }
+    }
+}
+
+// Duration
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DurationConfig {
+    #[serde(default = "DurationConfig::default_background")]
+    pub background: Color,
+
+    #[serde(default = "DurationConfig::default_foreground")]
+    pub foreground: Color,
+
+    #[serde(default = "DurationConfig::default_icon")]
+    pub icon: String,
+}
+impl DurationConfig {
+    fn default_background() -> Color {
+        color::CYAN
+    }
+    fn default_foreground() -> Color {
+        color::WHITE
+    }
+    fn default_icon() -> String {
+        "\u{fa1a}".to_string() // nf-mdi-timer
+    }
+}
+impl Default for DurationConfig {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+            icon: Self::default_icon(),
         }
     }
 }
@@ -568,6 +595,9 @@ pub struct GitRepoConfig {
     #[serde(default)]
     pub conflicted: GitRepoConfigConflicted,
 
+    #[serde(default = "GitRepoConfig::default_display_master")]
+    pub display_master: bool,
+
     #[serde(default = "GitRepoConfig::default_display_tag")]
     pub display_tag: bool,
 
@@ -575,6 +605,9 @@ pub struct GitRepoConfig {
     pub commit_hash_len: usize,
 }
 impl GitRepoConfig {
+    fn default_display_master() -> bool {
+        true
+    }
     fn default_display_tag() -> bool {
         true
     }
@@ -590,6 +623,7 @@ impl Default for GitRepoConfig {
             unstaged: GitRepoConfigUnstaged::default(),
             staged: GitRepoConfigStaged::default(),
             conflicted: GitRepoConfigConflicted::default(),
+            display_master: Self::default_display_master(),
             display_tag: Self::default_display_tag(),
             commit_hash_len: Self::default_commit_hash_len(),
         }
@@ -856,6 +890,9 @@ pub struct Config {
     pub time: TimeConfig,
 
     #[serde(default)]
+    pub duration: DurationConfig,
+
+    #[serde(default)]
     pub segment_separators: ConfigSegmentSeparators,
 
     #[serde(default = "Config::default_segments")]
@@ -864,8 +901,16 @@ pub struct Config {
 impl Config {
     fn default_segments() -> Vec<Vec<String>> {
         [
-            vec!["os", "shell", "user", "directory", "git_repo", "git_user"],
-            vec!["time", "status"],
+            vec![
+                "os",
+                "shell",
+                "time",
+                "user",
+                "directory",
+                "git_repo",
+                "git_user",
+            ],
+            vec!["duration", "status"],
         ]
         .iter()
         .map(|line| line.iter().map(|s| s.to_string()).collect())
