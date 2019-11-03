@@ -39,7 +39,7 @@ eval "$(almel init zsh)"
 Add the following to your `~/.config/fish/config.fish`:
 
 ```fish
-almel init zsh | source
+almel init fish | source
 ```
 
 ## Configuration
