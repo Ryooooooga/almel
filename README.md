@@ -26,7 +26,11 @@ eval "$(almel init zsh)"
 
 ### Fish
 
-Not supported yet.
+Add the following to your `~/.config/fish/config.fish`:
+
+```bash
+almel init zsh | source
+```
 
 ## Configuration
 

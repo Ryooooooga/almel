@@ -68,7 +68,7 @@ git_user:
 
 status:
   icons:
-    succeeded: "\uf62b" # nf-mdi-check
+    succeeded: "✓"
     failed: "\uf06a" # nf-fa-exclamation_circle
     root: "\ue00a" # nf-pom-external_interruption
     jobs: "\uf013" # nf-fa-gear
@@ -85,7 +85,7 @@ status:
 time:
   background: 8 # gray
   foreground: 7 # white
-  icon: "\uf64f" # nf-mdi-clock
+  icon: "\uf017" # nf-fa-clock_o
   format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
   utc: false
 

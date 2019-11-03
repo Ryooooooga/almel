@@ -8,6 +8,7 @@ arg_enum! {
     pub enum Shell {
         Bash,
         Zsh,
+        Fish,
     }
 }
 
@@ -27,6 +28,7 @@ impl Shell {
         match self {
             Self::Bash => include_str!("init/almel.bash"),
             Self::Zsh => include_str!("init/almel.zsh"),
+            Self::Fish => include_str!("init/almel.fish"),
         }
     }
 
@@ -34,6 +36,7 @@ impl Shell {
         match self {
             Self::Bash => format!("\\[\u{001b}[48;5;{}m\\]", color),
             Self::Zsh => format!("%{{\u{001b}[48;5;{}m%}}", color),
+            Self::Fish => format!("\u{001b}[48;5;{}m", color),
         }
     }
 
@@ -41,6 +44,7 @@ impl Shell {
         match self {
             Self::Bash => format!("\\[\u{001b}[38;5;{}m\\]", color),
             Self::Zsh => format!("%{{\u{001b}[38;5;{}m%}}", color),
+            Self::Fish => format!("\u{001b}[38;5;{}m", color),
         }
     }
 
@@ -48,6 +52,7 @@ impl Shell {
         match self {
             Self::Bash => "\\[\u{001b}[m\\]",
             Self::Zsh => "%{\u{001b}[m%}",
+            Self::Fish => "\u{001b}[m",
         }
     }
 
@@ -55,6 +60,7 @@ impl Shell {
         match self {
             Self::Bash => "\\u",
             Self::Zsh => "%n",
+            Self::Fish => "", // TODO: fish support
         }
     }
 
@@ -62,6 +68,7 @@ impl Shell {
         match self {
             Self::Bash => "\\h",
             Self::Zsh => "%m",
+            Self::Fish => "", // TODO: fish support
         }
     }
 }
