@@ -120,6 +120,10 @@ fn build_remote_status<'a>(
 
     let (ahead, behind) = repo.graph_ahead_behind(local_oid, upstream_oid).ok()?;
 
+    if (ahead, behind) == (0, 0) {
+        return None;
+    }
+
     let mut status = String::new();
 
     if behind != 0 {
