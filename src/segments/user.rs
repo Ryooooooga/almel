@@ -3,6 +3,13 @@ use std::borrow::Cow;
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
+#[cfg(target_os = "windows")]
+mod users {
+    pub fn get_current_username() -> Option<std::ffi::OsString> {
+        std::env::var_os("USERNAME")
+    }
+}
+
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.user;
 

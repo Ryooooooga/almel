@@ -7,6 +7,8 @@ use std::path::{Path, PathBuf};
 
 use crate::context::Color;
 
+// TODO: default values
+
 // OS
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OsConfig {
