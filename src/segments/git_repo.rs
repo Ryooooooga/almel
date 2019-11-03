@@ -1,7 +1,8 @@
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use lazy_static::lazy_static;
 
-use crate::config::{GitRepoConfig, GitRepoConfigColors};
+use crate::color::Color;
+use crate::config::GitRepoConfig;
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
@@ -131,15 +132,15 @@ fn build_remote_status<'a>(
     Some(status)
 }
 
-fn get_colors<'a>(config: &'a GitRepoConfig, statuses: &Status) -> &'a GitRepoConfigColors {
+fn get_colors(config: &GitRepoConfig, statuses: &Status) -> (Color, Color) {
     if statuses.intersects(*STATUS_CONFLICTED) {
-        &config.conflicted
+        (config.conflicted.background, config.conflicted.foreground)
     } else if statuses.intersects(*STATUS_UNSTAGED) {
-        &config.unstaged
+        (config.unstaged.background, config.unstaged.foreground)
     } else if statuses.intersects(*STATUS_STAGED) {
-        &config.staged
+        (config.staged.background, config.staged.foreground)
     } else {
-        &config.clean
+        (config.clean.background, config.clean.foreground)
     }
 }
 
@@ -169,11 +170,11 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         content += &format!(" {}", remote_status);
     }
 
-    let colors = get_colors(config, &statuses);
+    let (background, foreground) = get_colors(config, &statuses);
 
     Ok(Some(Segment {
-        background: colors.background,
-        foreground: colors.foreground,
+        background,
+        foreground,
         content,
     }))
 }

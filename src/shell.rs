@@ -1,7 +1,7 @@
 use lazy_static::lazy_static;
 use structopt::clap::arg_enum;
 
-use crate::context::Color;
+use crate::color::Color;
 
 arg_enum! {
     #[derive(Debug)]

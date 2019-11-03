@@ -15,17 +15,17 @@ os:
 shell:
   bash:
     background: 7 # white
-    foreground: 2 # cyan
+    foreground: 2 # green
     icon: "Bash"
 
   zsh:
     background: 7 # white
-    foreground: 2 # cyan
+    foreground: 2 # green
     icon: "Zsh"
 
   fish:
     background: 7 # white
-    foreground: 2 # cyan
+    foreground: 2 # green
     icon: "\uf739" # nf-mdi-fish
 
 user:

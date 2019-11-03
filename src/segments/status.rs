@@ -1,4 +1,5 @@
-use crate::context::{Color, Context};
+use crate::color::Color;
+use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
 #[cfg(taget_os = "windows")]

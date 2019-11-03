@@ -16,11 +16,19 @@ cargo install almel
 
 I provide precompiled binary for mac and for Windows in the [releases](releases).
 
-### Bash/Zsh
+### Bash
 
-Add the following to your `.bashrc` and/or `.zshrc`:
+Add the following to your `.bashrc`.
 
 ```bash
+eval "$(almel init bash)"
+```
+
+### Zsh
+
+Add the following to your `.zshrc`.
+
+```zsh
 eval "$(almel init zsh)"
 ```
 
@@ -28,7 +36,7 @@ eval "$(almel init zsh)"
 
 Add the following to your `~/.config/fish/config.fish`:
 
-```bash
+```fish
 almel init zsh | source
 ```
 

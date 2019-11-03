@@ -9,7 +9,8 @@ mod user;
 
 use failure::{format_err, Error};
 
-use crate::context::{Color, Context};
+use crate::color::Color;
+use crate::context::Context;
 
 type SegmentError = Error;
 

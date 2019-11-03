@@ -6,15 +6,23 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let config = &context.config.shell;
     let shell = &context.opt.shell;
 
-    let config = match shell {
-        Shell::Bash => &config.bash,
-        Shell::Zsh => &config.zsh,
-        Shell::Fish => &config.fish,
+    let segment = match shell {
+        Shell::Bash => Segment {
+            background: config.bash.background,
+            foreground: config.bash.foreground,
+            content: config.bash.icon.clone(),
+        },
+        Shell::Zsh => Segment {
+            background: config.zsh.background,
+            foreground: config.zsh.foreground,
+            content: config.zsh.icon.clone(),
+        },
+        Shell::Fish => Segment {
+            background: config.fish.background,
+            foreground: config.fish.foreground,
+            content: config.fish.icon.clone(),
+        },
     };
 
-    Ok(Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
-        content: config.icon.clone(),
-    }))
+    Ok(Some(segment))
 }
