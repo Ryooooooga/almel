@@ -74,6 +74,7 @@
 #     background: 1 # red
 #     foreground: 0 # black
 
+#   display_master: true
 #   display_tag: true
 #   commit_hash_len: 6
 

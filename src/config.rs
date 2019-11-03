@@ -562,6 +562,9 @@ pub struct GitRepoConfig {
     #[serde(default)]
     pub conflicted: GitRepoConfigConflicted,
 
+    #[serde(default = "GitRepoConfig::default_display_master")]
+    pub display_master: bool,
+
     #[serde(default = "GitRepoConfig::default_display_tag")]
     pub display_tag: bool,
 
@@ -569,6 +572,9 @@ pub struct GitRepoConfig {
     pub commit_hash_len: usize,
 }
 impl GitRepoConfig {
+    fn default_display_master() -> bool {
+        true
+    }
     fn default_display_tag() -> bool {
         true
     }
@@ -584,6 +590,7 @@ impl Default for GitRepoConfig {
             unstaged: GitRepoConfigUnstaged::default(),
             staged: GitRepoConfigStaged::default(),
             conflicted: GitRepoConfigConflicted::default(),
+            display_master: Self::default_display_master(),
             display_tag: Self::default_display_tag(),
             commit_hash_len: Self::default_commit_hash_len(),
         }

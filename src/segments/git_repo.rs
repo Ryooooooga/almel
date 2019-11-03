@@ -47,41 +47,49 @@ fn find_tag<'a>(repo: &'a Repository, oid: &Oid) -> Option<Reference<'a>> {
         .next()
 }
 
-fn build_head_name(config: &GitRepoConfig, repo: &Repository, head: &Option<Reference>) -> String {
+#[derive(Debug)]
+enum HeadStatus<'a> {
+    Branch(&'a str),
+    Tag(String),
+    Commit(String),
+}
+
+fn get_head_status<'a>(
+    repo: &'a Repository,
+    head: &'a Option<Reference>,
+    display_tag: bool,
+    commit_hash_len: usize,
+) -> HeadStatus<'a> {
     let head = match head {
         Some(head) => head,
 
         // Empty repository
-        None => return format!("{} {}", config.icons.branch, "master"),
+        None => return HeadStatus::Branch("master"),
     };
 
     if head.is_branch() {
         // HEAD is a branch
-        return format!(
-            "{} {}",
-            config.icons.branch,
-            head.shorthand().unwrap_or("?")
-        );
+        return HeadStatus::Branch(head.shorthand().unwrap_or("?"));
     }
 
     let oid = match head.target() {
         Some(oid) => oid,
 
         // Because WTF?
-        None => return format!("{} {}", config.icons.commit, "?"),
+        None => return HeadStatus::Commit("?".to_string()),
     };
 
-    if config.display_tag {
+    if display_tag {
         if let Some(tag) = find_tag(repo, &oid) {
-            return format!("{} {}", config.icons.tag, tag.shorthand().unwrap_or("?"));
+            return HeadStatus::Tag(tag.shorthand().unwrap_or("?").to_string());
         }
     }
 
     // HEAD is a simple commit
     let mut hash_str = oid.to_string();
-    hash_str.truncate(config.commit_hash_len);
+    hash_str.truncate(commit_hash_len);
 
-    format!("{} {}", config.icons.commit, hash_str)
+    HeadStatus::Commit(hash_str)
 }
 
 fn build_status_icons(config: &GitRepoConfig, statuses: &Status) -> String {
@@ -159,12 +167,21 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let head = repo.head().ok();
     let statuses = get_repo_statuses(repo);
 
-    let head_name = build_head_name(config, repo, &head);
+    let head_status = get_head_status(repo, &head, config.display_tag, config.commit_hash_len);
     let status_icons = build_status_icons(config, &statuses);
     let remote_status = build_remote_status(config, &repo, &head);
 
     // Build content
-    let mut content = head_name;
+    let mut content = String::new();
+
+    match &head_status {
+        HeadStatus::Branch("master") if !config.display_master => {
+            content += &format!("{}", config.icons.branch)
+        }
+        HeadStatus::Branch(name) => content += &format!("{} {}", config.icons.branch, name),
+        HeadStatus::Tag(name) => content += &format!("{} {}", config.icons.tag, name),
+        HeadStatus::Commit(hash) => content += &format!("{} {}", config.icons.commit, hash),
+    }
 
     if !status_icons.is_empty() {
         content += &format!(" {}", status_icons);
