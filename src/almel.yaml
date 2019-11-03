@@ -12,6 +12,22 @@ os:
     foreground: 7 # white
     icon: "\uf17a" # nf-fa-windows
 
+shell:
+  bash:
+    background: 7 # white
+    foreground: 2 # cyan
+    icon: "Bash"
+
+  zsh:
+    background: 7 # white
+    foreground: 2 # cyan
+    icon: "Zsh"
+
+  fish:
+    background: 7 # white
+    foreground: 2 # cyan
+    icon: "\uf739" # nf-mdi-fish
+
 user:
   background: 0 # black
   foreground: 7 # white
@@ -94,6 +110,7 @@ segment_separators:
 
 segments:
   - - os
+    - shell
     - user
     - directory
     - git_repo

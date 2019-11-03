@@ -2,6 +2,7 @@ mod directory;
 mod git_repo;
 mod git_user;
 mod os;
+mod shell;
 mod status;
 mod time;
 mod user;
@@ -22,6 +23,7 @@ pub struct Segment {
 pub fn build_segment(context: &Context, name: &str) -> Result<Option<Segment>, SegmentError> {
     match name {
         "os" => os::build_segment(&context),
+        "shell" => shell::build_segment(&context),
         "directory" => directory::build_segment(&context),
         "user" => user::build_segment(&context),
         "status" => status::build_segment(&context),

@@ -22,6 +22,21 @@ pub struct OsConfigEntry {
     pub icon: String,
 }
 
+// Shell
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ShellConfig {
+    pub bash: ShellConfigEntry,
+    pub zsh: ShellConfigEntry,
+    pub fish: ShellConfigEntry,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ShellConfigEntry {
+    pub background: Color,
+    pub foreground: Color,
+    pub icon: String,
+}
+
 // User
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserConfig {
@@ -145,6 +160,7 @@ pub struct ConfigSegmentSeparators {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub os: OsConfig,
+    pub shell: ShellConfig,
     pub user: UserConfig,
     pub directory: DirectoryConfig,
     pub git_repo: GitRepoConfig,
