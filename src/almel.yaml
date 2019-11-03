@@ -1,119 +1,119 @@
-os:
-  linux:
-    background: 6 # cyan
-    foreground: 7 # white
-    icon: "\uf17c" # nf-fa-linux
-  mac:
-    background: 6 # cyan
-    foreground: 7 # white
-    icon: "\uf179" # nf-fa-apple
-  windows:
-    background: 6 # cyan
-    foreground: 7 # white
-    icon: "\uf17a" # nf-fa-windows
+# os:
+#   linux:
+#     background: 6 # cyan
+#     foreground: 7 # white
+#     icon: "\uf17c" # nf-fa-linux
+#   mac:
+#     background: 6 # cyan
+#     foreground: 7 # white
+#     icon: "\uf179" # nf-fa-apple
+#   windows:
+#     background: 6 # cyan
+#     foreground: 7 # white
+#     icon: "\uf17a" # nf-fa-windows
 
-shell:
-  bash:
-    background: 7 # white
-    foreground: 2 # green
-    icon: "Bash"
+# shell:
+#   bash:
+#     background: 7 # white
+#     foreground: 2 # green
+#     icon: "Bash"
 
-  zsh:
-    background: 7 # white
-    foreground: 2 # green
-    icon: "Zsh"
+#   zsh:
+#     background: 7 # white
+#     foreground: 2 # green
+#     icon: "Zsh"
 
-  fish:
-    background: 7 # white
-    foreground: 2 # green
-    icon: "\uf739" # nf-mdi-fish
+#   fish:
+#     background: 7 # white
+#     foreground: 2 # green
+#     icon: "\uf739" # nf-mdi-fish
 
-user:
-  background: 0 # black
-  foreground: 7 # white
-  display_host: true
+# user:
+#   background: 0 # black
+#   foreground: 7 # white
+#   display_host: true
 
-directory:
-  home: "~"
-  normal:
-    background: 4 # blue
-    foreground: 0 # black
-  error:
-    background: 1 # red
-    foreground: 0 # black
-  shrink:
-    enabled: true
-    max_len: 1
+# directory:
+#   home: "~"
+#   normal:
+#     background: 4 # blue
+#     foreground: 0 # black
+#   error:
+#     background: 1 # red
+#     foreground: 0 # black
+#   shrink:
+#     enabled: true
+#     max_len: 1
 
-git_repo:
-  icons:
-    branch: "\uf418" # nf-oct-git_branch
-    tag: "\uf412" # nf-oct-tag
-    commit: "\uf417" # nf-oct-git_commit
-    modified: "…"
-    added: "+"
-    deleted: "-"
-    added_deleted: "±"
-    conflicted: "\uf47f" # nf-oct-git_compare
-    behind: "\uf175" # nf-fa-long_arrow_down
-    ahead: "\uf176" # nf-fa-long_arrow_up
+# git_repo:
+#   icons:
+#     branch: "\uf418" # nf-oct-git_branch
+#     tag: "\uf412" # nf-oct-tag
+#     commit: "\uf417" # nf-oct-git_commit
+#     modified: "…"
+#     added: "+"
+#     deleted: "-"
+#     added_deleted: "±"
+#     conflicted: "\uf47f" # nf-oct-git_compare
+#     behind: "\uf175" # nf-fa-long_arrow_down
+#     ahead: "\uf176" # nf-fa-long_arrow_up
 
-  clean:
-    background: 2 # green
-    foreground: 0 # black
+#   clean:
+#     background: 2 # green
+#     foreground: 0 # black
 
-  unstaged:
-    background: 3 # yellow
-    foreground: 0 # black
+#   unstaged:
+#     background: 3 # yellow
+#     foreground: 0 # black
 
-  staged:
-    background: 2 # green
-    foreground: 0 # black
+#   staged:
+#     background: 2 # green
+#     foreground: 0 # black
 
-  conflicted:
-    background: 1 # red
-    foreground: 0 # black
+#   conflicted:
+#     background: 1 # red
+#     foreground: 0 # black
 
-  display_tag: true
-  commit_hash_len: 6
+#   display_tag: true
+#   commit_hash_len: 6
 
-git_user:
-  background: 6 # cyan
-  foreground: 0 # black
-  icon: "\uf2c0" # nf-fa-user_o
+# git_user:
+#   background: 6 # cyan
+#   foreground: 0 # black
+#   icon: "\uf2c0" # nf-fa-user_o
 
-status:
-  icons:
-    succeeded: "✓"
-    failed: "\uf06a" # nf-fa-exclamation_circle
-    root: "\ue00a" # nf-pom-external_interruption
-    jobs: "\uf013" # nf-fa-gear
+# status:
+#   icons:
+#     succeeded: "✓"
+#     failed: "\uf06a" # nf-fa-exclamation_circle
+#     root: "\ue00a" # nf-pom-external_interruption
+#     jobs: "\uf013" # nf-fa-gear
 
-  succeeded:
-    background: 7 # white
-    foreground: 4 # blue
+#   succeeded:
+#     background: 7 # white
+#     foreground: 4 # blue
 
-  failed:
-    background: 1 # red
-    foreground: 7 # white
-    display_exit_status: true
+#   failed:
+#     background: 1 # red
+#     foreground: 7 # white
+#     display_exit_status: true
 
-time:
-  background: 8 # gray
-  foreground: 7 # white
-  icon: "\uf017" # nf-fa-clock_o
-  format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
-  utc: false
+# time:
+#   background: 8 # gray
+#   foreground: 7 # white
+#   icon: "\uf017" # nf-fa-clock_o
+#   format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
+#   utc: false
 
-segment_separators:
-  left_solid: "\ue0b0" # nf-pl-left_hard_divider
+# segment_separators:
+#   left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
-segments:
-  - - os
-    - shell
-    - user
-    - directory
-    - git_repo
-    - git_user
-  - - time
-    - status
+# segments:
+#   - - os
+#     - shell
+#     - user
+#     - directory
+#     - git_repo
+#     - git_user
+#   - - time
+#     - status
