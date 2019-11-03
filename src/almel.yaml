@@ -101,8 +101,7 @@
 # time:
 #   background: 8 # gray
 #   foreground: 7 # white
-#   icon: "\uf017" # nf-fa-clock_o
-#   format: "%Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
+#   format: "\uf017 %Y/%m/%d %H:%M:%S%.3f" # See https://docs.rs/chrono/0.3.0/chrono/format/strftime/
 #   utc: false
 
 # segment_separators:

@@ -512,9 +512,6 @@ pub struct TimeConfig {
     #[serde(default = "TimeConfig::default_foreground")]
     pub foreground: Color,
 
-    #[serde(default = "TimeConfig::default_icon")]
-    pub icon: String,
-
     #[serde(default = "TimeConfig::default_format")]
     pub format: String,
 
@@ -528,11 +525,9 @@ impl TimeConfig {
     fn default_foreground() -> Color {
         color::WHITE
     }
-    fn default_icon() -> String {
-        "\u{f017}".to_string() // nf-fa-clock_o
-    }
     fn default_format() -> String {
-        "%Y/%m/%d %H:%M:%S%.3f".to_string()
+        // nf-fa-clock_o
+        "\u{f017} %Y/%m/%d %H:%M:%S%.3f".to_string()
     }
     fn default_utc() -> bool {
         false
@@ -543,7 +538,6 @@ impl Default for TimeConfig {
         Self {
             background: Self::default_background(),
             foreground: Self::default_foreground(),
-            icon: Self::default_icon(),
             format: Self::default_format(),
             utc: Self::default_utc(),
         }
