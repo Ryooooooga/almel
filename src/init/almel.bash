@@ -7,8 +7,4 @@ almel_precmd() {
     PS1="$(almel prompt bash -s$STATUS -j$NUM_JOBS)"
 }
 
-almel_setup() {
-    PROMPT_COMMAND=almel_precmd
-}
-
-almel_setup
+PROMPT_COMMAND=almel_precmd

@@ -16,17 +16,17 @@ cargo install almel
 
 I provide precompiled binary for mac and for Windows in the [releases](releases).
 
-### Bash
+### Bash/Zsh
 
-Not supported yet...
+Add the following to your `.bashrc` and/or `.zshrc`:
 
-### Zsh
-
-Add the following to your `.zshrc`:
-
-```zsh
+```bash
 eval "$(almel init zsh)"
 ```
+
+### Fish
+
+Not supported yet.
 
 ## Configuration
 
