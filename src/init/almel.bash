@@ -1,6 +1,3 @@
-almel_preexec() {
-}
-
 almel_precmd() {
     STATUS=$?
     NUM_JOBS="$(jobs | wc -l)"

@@ -55,20 +55,4 @@ impl Shell {
             Self::Fish => "\u{001b}[m",
         }
     }
-
-    pub fn username(&self) -> &'static str {
-        match self {
-            Self::Bash => "\\u",
-            Self::Zsh => "%n",
-            Self::Fish => "", // TODO: fish support
-        }
-    }
-
-    pub fn hostname(&self) -> &'static str {
-        match self {
-            Self::Bash => "\\h",
-            Self::Zsh => "%m",
-            Self::Fish => "", // TODO: fish support
-        }
-    }
 }

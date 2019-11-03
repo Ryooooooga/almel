@@ -1,14 +1,25 @@
+use std::borrow::Cow;
+
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.user;
-    let shell = &context.opt.shell;
 
-    let content = if config.display_host {
-        format!("{}@{}", shell.username(), shell.hostname())
+    let username = users::get_current_username();
+    let username = username
+        .as_ref()
+        .map(|u| u.to_string_lossy())
+        .unwrap_or(Cow::from("?"));
+
+    let hostname = hostname::get_hostname();
+    let hostname = hostname.as_ref().map(|h| h.as_str()).unwrap_or("?");
+
+    let content;
+    if config.display_host {
+        content = format!("{}@{}", username, hostname)
     } else {
-        format!("{}", shell.username())
+        content = format!("{}", username)
     };
 
     Ok(Some(Segment {
