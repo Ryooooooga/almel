@@ -1,34 +1,36 @@
-pub mod dir;
-pub mod git;
-pub mod newline;
-pub mod os;
-pub mod status;
-pub mod user;
+mod directory;
+mod git_repo;
+mod git_user;
+mod os;
+mod shell;
+mod status;
+mod time;
+mod user;
 
-use failure::{Error, Fail};
-use std::io;
+use failure::{format_err, Error};
 
-use crate::config::Config;
-use crate::prompt::Prompt;
+use crate::color::Color;
+use crate::context::Context;
 
-#[derive(Debug, Fail)]
-pub enum SegmentError {
-    #[fail(display = "Unknown segment {}", 0)]
-    UnknownSegment(String),
+type SegmentError = Error;
+
+#[derive(Debug)]
+pub struct Segment {
+    pub background: Color,
+    pub foreground: Color,
+    pub content: String,
 }
 
-pub fn prompt_segment<W: io::Write>(
-    p: &mut Prompt<W>,
-    config: &Config,
-    segment_name: &str,
-) -> Result<(), Error> {
-    match segment_name {
-        "os" => os::prompt_segment(p, &config.os),
-        "user" => user::prompt_segment(p, &config.user),
-        "dir" => dir::prompt_segment(p, &config.dir),
-        "git" => git::prompt_segment(p, &config.git),
-        "status" => status::prompt_segment(p, &config.status),
-        "newline" => newline::prompt_segment(p, &config.newline),
-        _ => failure::bail!(SegmentError::UnknownSegment(segment_name.to_string())),
+pub fn build_segment(context: &Context, name: &str) -> Result<Option<Segment>, SegmentError> {
+    match name {
+        "os" => os::build_segment(&context),
+        "shell" => shell::build_segment(&context),
+        "directory" => directory::build_segment(&context),
+        "user" => user::build_segment(&context),
+        "status" => status::build_segment(&context),
+        "time" => time::build_segment(&context),
+        "git_repo" => git_repo::build_segment(&context),
+        "git_user" => git_user::build_segment(&context),
+        _ => Err(format_err!("Unknown segment: {}", name)),
     }
 }

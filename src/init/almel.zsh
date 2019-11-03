@@ -1,10 +1,10 @@
-unsetopt prompt_subst;
-
 almel_preexec() {
 }
 
 almel_precmd() {
-    PROMPT="$(EXIT_STATUS="$?" JOBS=$(jobs) almel prompt zsh)"
+    STATUS=$?
+    NUM_JOBS=$#jobstates
+    PROMPT="$(almel prompt zsh -s$STATUS -j$NUM_JOBS)"
 }
 
 almel_setup() {

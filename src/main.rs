@@ -1,57 +1,21 @@
+mod color;
 mod config;
+mod context;
 mod init;
+mod opt;
 mod prompt;
 mod segments;
 mod shell;
 
-use clap::{App, Arg, SubCommand};
 use failure::Error;
 
-use crate::shell::Shell;
+use crate::opt::{Opt, Subcommand};
 
-fn run() -> Result<(), Error> {
-    let matches = App::new(clap::crate_name!())
-        .version(clap::crate_version!())
-        .author(clap::crate_authors!())
-        .about(clap::crate_description!())
-        .version_short("v")
-        .setting(clap::AppSettings::ArgRequiredElseHelp)
-        .subcommand(
-            SubCommand::with_name("init")
-                .about("Initialize the shell prompt")
-                .arg(Arg::with_name("shell").help("shell").required(true)),
-        )
-        .subcommand(
-            SubCommand::with_name("prompt")
-                .about("Print the prompt")
-                .arg(Arg::with_name("shell").help("Shell name").required(true)),
-        )
-        .get_matches();
+fn main() -> Result<(), Error> {
+    let opt = Opt::parse();
 
-    match matches.subcommand() {
-        ("init", Some(args)) => {
-            // almel init <shell>
-            let shell_name = args.value_of("shell").unwrap(); // Required parameter
-            let shell = Shell::from_name(shell_name)?;
-
-            init::init(shell)?;
-        }
-        ("prompt", Some(args)) => {
-            // almel prompt <shell>
-            let shell_name = args.value_of("shell").unwrap(); // Required parameter
-            let shell = Shell::from_name(shell_name)?;
-
-            prompt::prompt(shell)?;
-        }
-        _ => unreachable!(),
-    };
-
-    Ok(())
-}
-
-fn main() {
-    if let Err(err) = run() {
-        eprintln!("Error: {}", err);
-        std::process::exit(1);
+    match &opt.subcommand {
+        Subcommand::Init(args) => init::run(&args),
+        Subcommand::Prompt(args) => prompt::run(&args),
     }
 }

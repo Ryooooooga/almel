@@ -1,5 +1,7 @@
 # Almel
 
+[![](https://badgen.net/crates/v/almel)](https://crates.io/crates/almel)
+
 A ZSH theme inspired by [agnoster-zsh-theme](https://github.com/agnoster/agnoster-zsh-theme), written in Rust.
 
 ![](docs/almel.png)
@@ -18,14 +20,26 @@ I provide precompiled binary for mac and for Windows in the [releases](releases)
 
 ### Bash
 
-Not supported yet...
+Add the following to your `.bashrc`.
+
+```bash
+eval "$(almel init bash)"
+```
 
 ### Zsh
 
-Add the following to your `.zshrc`:
+Add the following to your `.zshrc`.
 
 ```zsh
 eval "$(almel init zsh)"
+```
+
+### Fish
+
+Add the following to your `~/.config/fish/config.fish`:
+
+```fish
+almel init zsh | source
 ```
 
 ## Configuration

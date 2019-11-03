@@ -1,56 +1,37 @@
-use failure::Error;
-use serde::{Deserialize, Serialize};
-use std::default::Default;
-use std::io;
+use std::borrow::Cow;
 
-use crate::prompt::Prompt;
+use crate::context::Context;
+use crate::segments::{Segment, SegmentError};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    #[serde(default = "Config::default_background")]
-    pub background: String,
-
-    #[serde(default = "Config::default_foreground")]
-    pub foreground: String,
-
-    #[serde(default = "Config::default_display_host")]
-    pub display_host: bool,
-}
-
-impl Config {
-    fn default_background() -> String {
-        "black".to_string()
-    }
-
-    fn default_foreground() -> String {
-        "white".to_string()
-    }
-
-    fn default_display_host() -> bool {
-        true
+#[cfg(target_os = "windows")]
+mod users {
+    pub fn get_current_username() -> Option<std::ffi::OsString> {
+        std::env::var_os("USERNAME")
     }
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-            display_host: Self::default_display_host(),
-        }
-    }
-}
+pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+    let config = &context.config.user;
 
-pub fn prompt_segment<W: io::Write>(p: &mut Prompt<W>, config: &Config) -> Result<(), Error> {
-    let text;
+    let username = users::get_current_username();
+    let username = username
+        .as_ref()
+        .map(|u| u.to_string_lossy())
+        .unwrap_or(Cow::from("?"));
 
+    let hostname = hostname::get_hostname();
+    let hostname = hostname.as_ref().map(|h| h.as_str()).unwrap_or("?");
+
+    let content;
     if config.display_host {
-        text = "%n@%m"
+        content = format!("{}@{}", username, hostname)
     } else {
-        text = "%n"
-    }
+        content = format!("{}", username)
+    };
 
-    p.write_segment(&config.background, &config.foreground, text)?;
-
-    Ok(())
+    Ok(Some(Segment {
+        background: config.background,
+        foreground: config.foreground,
+        content,
+    }))
 }
