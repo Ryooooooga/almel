@@ -1,10 +1,14 @@
 almel_preexec() {
+    ALMEL_START="$EPOCHREALTIME"
 }
 
 almel_precmd() {
-    STATUS=$?
-    NUM_JOBS=$#jobstates
-    PROMPT="$(almel prompt zsh -s$STATUS -j$NUM_JOBS)"
+    STATUS="$?"
+    NUM_JOBS="$#jobstates"
+    END="$EPOCHREALTIME"
+    DURATION="$(($END - ${ALMEL_START:-$END}))"
+    PROMPT="$(almel prompt zsh -s"$STATUS" -j"$NUM_JOBS" -d"$DURATION")"
+    unset ALMEL_START
 }
 
 almel_setup() {

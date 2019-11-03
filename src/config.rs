@@ -527,7 +527,7 @@ impl TimeConfig {
     }
     fn default_format() -> String {
         // nf-fa-clock_o
-        "\u{f017} %Y/%m/%d %H:%M:%S%.3f".to_string()
+        "\u{f017} %Y/%m/%d %H:%M:%S".to_string()
     }
     fn default_utc() -> bool {
         false
@@ -540,6 +540,39 @@ impl Default for TimeConfig {
             foreground: Self::default_foreground(),
             format: Self::default_format(),
             utc: Self::default_utc(),
+        }
+    }
+}
+
+// Duration
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DurationConfig {
+    #[serde(default = "DurationConfig::default_background")]
+    pub background: Color,
+
+    #[serde(default = "DurationConfig::default_foreground")]
+    pub foreground: Color,
+
+    #[serde(default = "DurationConfig::default_icon")]
+    pub icon: String,
+}
+impl DurationConfig {
+    fn default_background() -> Color {
+        color::CYAN
+    }
+    fn default_foreground() -> Color {
+        color::WHITE
+    }
+    fn default_icon() -> String {
+        "\u{fa1a}".to_string() // nf-mdi-timer
+    }
+}
+impl Default for DurationConfig {
+    fn default() -> Self {
+        Self {
+            background: Self::default_background(),
+            foreground: Self::default_foreground(),
+            icon: Self::default_icon(),
         }
     }
 }
@@ -857,6 +890,9 @@ pub struct Config {
     pub time: TimeConfig,
 
     #[serde(default)]
+    pub duration: DurationConfig,
+
+    #[serde(default)]
     pub segment_separators: ConfigSegmentSeparators,
 
     #[serde(default = "Config::default_segments")]
@@ -865,8 +901,16 @@ pub struct Config {
 impl Config {
     fn default_segments() -> Vec<Vec<String>> {
         [
-            vec!["os", "shell", "user", "directory", "git_repo", "git_user"],
-            vec!["time", "status"],
+            vec![
+                "os",
+                "shell",
+                "time",
+                "user",
+                "directory",
+                "git_repo",
+                "git_user",
+            ],
+            vec!["duration", "status"],
         ]
         .iter()
         .map(|line| line.iter().map(|s| s.to_string()).collect())
