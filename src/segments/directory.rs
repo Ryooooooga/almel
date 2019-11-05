@@ -30,24 +30,25 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     }
 
     if config.shrink.enabled {
-        if let Some(parent) = cwd.parent() {
-            for name in parent {
-                let name = &name.to_string_lossy();
+        let mut components = cwd.iter();
+        let last = components.next_back();
 
-                let n;
-                if name.starts_with(".") {
-                    n = config.shrink.max_len + 1;
-                } else {
-                    n = config.shrink.max_len;
-                }
+        for name in components {
+            let name = &name.to_string_lossy();
 
-                let shorten: String = name.chars().take(n).collect();
-                dir.push(shorten);
+            let n;
+            if name.starts_with(".") {
+                n = config.shrink.max_len + 1;
+            } else {
+                n = config.shrink.max_len;
             }
+
+            let shorten: String = name.chars().take(n).collect();
+            dir.push(shorten);
         }
 
-        if let Some(file_name) = cwd.file_name() {
-            dir.push(file_name)
+        if let Some(last) = last {
+            dir.push(last)
         }
     } else {
         dir.push(cwd);
