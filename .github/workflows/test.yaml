@@ -10,5 +10,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build
         run: cargo build --verbose
+      - name: Lint
+        run: cargo fmt --verbose --all -- --check
       - name: Run tests
         run: cargo test --verbose
