@@ -13,7 +13,7 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
 
     for (i, line) in context.config.segments.iter().enumerate() {
         if i > 0 {
-            println!("");
+            println!();
         }
 
         let mut prev_bg = None;
@@ -24,20 +24,20 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
                     if let Some(prev_bg) = &prev_bg {
                         print!(
                             "{}{}{}",
-                            shell.bg_color(&segment.background),
-                            shell.fg_color(prev_bg),
+                            shell.bg_color(segment.background),
+                            shell.fg_color(*prev_bg),
                             separator
                         );
                     }
 
                     print!(
                         "{}{} {} ",
-                        shell.bg_color(&segment.background),
-                        shell.fg_color(&segment.foreground),
+                        shell.bg_color(segment.background),
+                        shell.fg_color(segment.foreground),
                         segment.content,
                     );
 
-                    prev_bg = Some(segment.background.clone());
+                    prev_bg = Some(segment.background);
                 }
                 Ok(None) => {}
                 Err(error) => {
@@ -50,7 +50,7 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
             print!(
                 "{}{}{}",
                 shell.reset_styles(),
-                shell.fg_color(&prev_bg),
+                shell.fg_color(prev_bg),
                 separator
             );
         }

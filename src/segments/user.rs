@@ -17,7 +17,7 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let username = username
         .as_ref()
         .map(|u| u.to_string_lossy())
-        .unwrap_or(Cow::from("?"));
+        .unwrap_or_else(|| Cow::from("?"));
 
     let hostname = hostname::get_hostname();
     let hostname = hostname.as_ref().map(|h| h.as_str()).unwrap_or("?");
