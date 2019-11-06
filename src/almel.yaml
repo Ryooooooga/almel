@@ -113,13 +113,13 @@
 # segment_separators:
 #   left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
-# segments:
-#   - - os
-#     - shell
-#     - time
-#     - user
-#     - directory
-#     - git_repo
-#     - git_user
-#   - - duration
-#     - status
+segments:
+  - - os
+    - shell
+    - time
+    - user
+    - directory
+    - git_repo
+    - git_user
+  - - duration
+    - status
