@@ -16,7 +16,7 @@ cargo install almel
 
 ### From precompiled binary
 
-I provide precompiled binary for mac and for Windows in the [releases](releases).
+I provide precompiled binary in [releases](releases).
 
 ### Bash
 
