@@ -32,7 +32,7 @@ impl Shell {
         }
     }
 
-    pub fn bg_color(&self, color: &Color) -> String {
+    pub fn bg_color(&self, color: Color) -> String {
         match self {
             Self::Bash => format!("\\[\u{001b}[48;5;{}m\\]", color),
             Self::Zsh => format!("%{{\u{001b}[48;5;{}m%}}", color),
@@ -40,7 +40,7 @@ impl Shell {
         }
     }
 
-    pub fn fg_color(&self, color: &Color) -> String {
+    pub fn fg_color(&self, color: Color) -> String {
         match self {
             Self::Bash => format!("\\[\u{001b}[38;5;{}m\\]", color),
             Self::Zsh => format!("%{{\u{001b}[38;5;{}m%}}", color),

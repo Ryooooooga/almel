@@ -34,7 +34,7 @@ fn get_repo_statuses(repo: &Repository) -> Status {
 
     repo.statuses(Some(&mut options))
         .map(|statuses| statuses.iter().fold(Status::empty(), |a, b| a | b.status()))
-        .unwrap_or(Status::empty())
+        .unwrap_or_else(|_| Status::empty())
 }
 
 fn find_tag<'a>(repo: &'a Repository, oid: &Oid) -> Option<Reference<'a>> {
@@ -42,9 +42,7 @@ fn find_tag<'a>(repo: &'a Repository, oid: &Oid) -> Option<Reference<'a>> {
 
     references
         .flatten()
-        .filter(|r| r.is_tag())
-        .filter(|r| r.target().as_ref() == Some(oid))
-        .next()
+        .find(|r| r.is_tag() && r.target().as_ref() == Some(oid))
 }
 
 #[derive(Debug)]
@@ -92,7 +90,7 @@ fn get_head_status<'a>(
     HeadStatus::Commit(hash_str)
 }
 
-fn build_status_icons(config: &GitRepoConfig, statuses: &Status) -> String {
+fn build_status_icons(config: &GitRepoConfig, statuses: Status) -> String {
     let mut icons = String::new();
 
     if statuses.intersects(*STATUS_MODIFIED) {
@@ -144,7 +142,7 @@ fn build_remote_status<'a>(
     Some(status)
 }
 
-fn get_colors(config: &GitRepoConfig, statuses: &Status) -> (Color, Color) {
+fn get_colors(config: &GitRepoConfig, statuses: Status) -> (Color, Color) {
     if statuses.intersects(*STATUS_CONFLICTED) {
         (config.conflicted.background, config.conflicted.foreground)
     } else if statuses.intersects(*STATUS_UNSTAGED) {
@@ -168,16 +166,14 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let statuses = get_repo_statuses(repo);
 
     let head_status = get_head_status(repo, &head, config.display_tag, config.commit_hash_len);
-    let status_icons = build_status_icons(config, &statuses);
+    let status_icons = build_status_icons(config, statuses);
     let remote_status = build_remote_status(config, &repo, &head);
 
     // Build content
     let mut content = String::new();
 
     match &head_status {
-        HeadStatus::Branch("master") if !config.display_master => {
-            content += &format!("{}", config.icons.branch)
-        }
+        HeadStatus::Branch("master") if !config.display_master => content += &config.icons.branch,
         HeadStatus::Branch(name) => content += &format!("{} {}", config.icons.branch, name),
         HeadStatus::Tag(name) => content += &format!("{} {}", config.icons.tag, name),
         HeadStatus::Commit(hash) => content += &format!("{} {}", config.icons.commit, hash),
@@ -191,7 +187,7 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         content += &format!(" {}", remote_status);
     }
 
-    let (background, foreground) = get_colors(config, &statuses);
+    let (background, foreground) = get_colors(config, statuses);
 
     Ok(Some(Segment {
         background,

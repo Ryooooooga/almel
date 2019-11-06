@@ -26,6 +26,15 @@ jobs:
           command: fmt
           args: --verbose --all -- --check
 
+      - name: rustup component add
+        run: rustup component add clippy
+
+      - name: Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --verbose --all -- -D warnings
+
   build:
     strategy:
       fail-fast: false

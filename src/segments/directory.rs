@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use crate::color::Color;
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
@@ -10,16 +9,11 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let mut cwd = context.current_dir.as_path();
     let mut dir = PathBuf::new();
 
-    let background: Color;
-    let foreground: Color;
-
-    if cwd.is_dir() {
-        background = config.normal.background;
-        foreground = config.normal.foreground;
+    let (background, foreground) = if cwd.is_dir() {
+        (config.normal.background, config.normal.foreground)
     } else {
-        background = config.error.background;
-        foreground = config.error.foreground;
-    }
+        (config.error.background, config.error.foreground)
+    };
 
     // Replace home
     if let Some(home) = dirs::home_dir() {
@@ -36,12 +30,11 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         for name in components {
             let name = &name.to_string_lossy();
 
-            let n;
-            if name.starts_with(".") {
-                n = config.shrink.max_len + 1;
+            let n = if name.starts_with('.') {
+                config.shrink.max_len + 1
             } else {
-                n = config.shrink.max_len;
-            }
+                config.shrink.max_len
+            };
 
             let shorten: String = name.chars().take(n).collect();
             dir.push(shorten);
