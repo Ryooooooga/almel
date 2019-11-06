@@ -2,12 +2,12 @@ use crate::color::Color;
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
-#[cfg(taget_os = "windows")]
+#[cfg(target_os = "windows")]
 fn is_root_user() -> bool {
     false // TODO: for Windows
 }
 
-#[cfg(not(taget_os = "windows"))]
+#[cfg(not(target_os = "windows"))]
 fn is_root_user() -> bool {
     users::get_current_uid() == 0
 }
