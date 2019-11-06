@@ -14,9 +14,9 @@ pub struct Context<'ctx> {
 
 impl<'ctx> Context<'ctx> {
     pub fn new(opt: &'ctx PromptArgs, config: &'ctx Config) -> Result<Self, Error> {
-        let current_dir = std::env::current_dir()
-            .ok()
-            .or_else(|| std::env::var("PWD").ok().map(PathBuf::from))
+        let current_dir = std::env::var_os("PWD")
+            .map(PathBuf::from)
+            .or_else(|| std::env::current_dir().ok())
             .expect("Could not estimate current directory");
 
         let git_repo = Repository::discover(&current_dir).ok();
