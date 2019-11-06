@@ -16,7 +16,7 @@ cargo install almel
 
 ### From precompiled binary
 
-I provide precompiled binary in [releases](releases).
+I provide precompiled binary in [releases](https://github.com/Ryooooooga/almel/releases).
 
 ### Bash
 
