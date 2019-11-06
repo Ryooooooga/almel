@@ -80,19 +80,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain:
-          - stable-x86_64-pc-windows-msvc
-          - stable-x86_64-apple-darwin
-          - stable-x86_64-unknown-linux-gnu
+        target:
+          - x86_64-pc-windows-msvc
+          - x86_64-apple-darwin
+          - x86_64-unknown-linux-gnu
         include:
-          - toolchain: stable-x86_64-pc-windows-msvc
+          - target: x86_64-pc-windows-msvc
             os: windows-latest
-          - toolchain: stable-x86_64-apple-darwin
+          - target: x86_64-apple-darwin
             os: macOS-latest
-          - toolchain: stable-x86_64-unknown-linux-gnu
+          - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
 
-    name: Release - ${{ matrix.toolchain }}
+    name: Release - ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     needs: [format, build]
     if: startsWith(github.ref, 'refs/tags/')
@@ -104,7 +104,7 @@ jobs:
       - name: rust-toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.toolchain }}
+          toolchain: stable-${{ matrix.target }}
           default: true
 
       - name: Build
