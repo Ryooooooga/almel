@@ -2,7 +2,7 @@ use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use lazy_static::lazy_static;
 
 use crate::color::Color;
-use crate::config::GitRepoConfig;
+use crate::configs::git_repo::Config;
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
 
@@ -90,7 +90,7 @@ fn get_head_status<'a>(
     HeadStatus::Commit(hash_str)
 }
 
-fn build_status_icons(config: &GitRepoConfig, statuses: Status) -> String {
+fn build_status_icons(config: &Config, statuses: Status) -> String {
     let mut icons = String::new();
 
     if statuses.intersects(*STATUS_MODIFIED) {
@@ -111,7 +111,7 @@ fn build_status_icons(config: &GitRepoConfig, statuses: Status) -> String {
 }
 
 fn build_remote_status<'a>(
-    config: &GitRepoConfig,
+    config: &Config,
     repo: &'a Repository,
     head: &Option<Reference<'a>>,
 ) -> Option<String> {
@@ -142,7 +142,7 @@ fn build_remote_status<'a>(
     Some(status)
 }
 
-fn get_colors(config: &GitRepoConfig, statuses: Status) -> (Color, Color) {
+fn get_colors(config: &Config, statuses: Status) -> (Color, Color) {
     if statuses.intersects(*STATUS_CONFLICTED) {
         (config.conflicted.background, config.conflicted.foreground)
     } else if statuses.intersects(*STATUS_UNSTAGED) {

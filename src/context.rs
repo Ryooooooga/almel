@@ -2,7 +2,7 @@ use failure::Error;
 use git2::Repository;
 use std::path::PathBuf;
 
-use crate::config::Config;
+use crate::configs::Config;
 use crate::opt::PromptArgs;
 
 pub struct Context<'ctx> {

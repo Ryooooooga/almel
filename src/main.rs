@@ -1,5 +1,5 @@
 mod color;
-mod config;
+mod configs;
 mod context;
 mod init;
 mod opt;
