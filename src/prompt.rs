@@ -1,6 +1,6 @@
 use failure::Error;
 
-use crate::config::Config;
+use crate::configs::Config;
 use crate::context::Context;
 use crate::opt::PromptArgs;
 use crate::segments;
