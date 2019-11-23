@@ -7,6 +7,7 @@ mod shell;
 mod status;
 mod time;
 mod user;
+mod venv;
 
 use failure::{format_err, Error};
 
@@ -33,6 +34,7 @@ pub fn build_segment(context: &Context, name: &str) -> Result<Option<Segment>, S
         "duration" => duration::build_segment(&context),
         "git_repo" => git_repo::build_segment(&context),
         "git_user" => git_user::build_segment(&context),
+        "venv" => venv::build_segment(&context),
         _ => Err(format_err!("Unknown segment: {}", name)),
     }
 }
