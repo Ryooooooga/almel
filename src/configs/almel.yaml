@@ -110,6 +110,11 @@
 #   foreground: 7 # white
 #   icon: "\ufa1a" # nf-mdi-timer
 
+# venv:
+#   background: 0 # black
+#   foreground: 7 # white
+#   icon: "\uf81f" # nf-mdi-language_python
+
 # segment_separators:
 #   left_solid: "\ue0b0" # nf-pl-left_hard_divider
 
@@ -121,5 +126,6 @@ segments:
     - directory
     - git_repo
     - git_user
+    - venv
   - - duration
     - status

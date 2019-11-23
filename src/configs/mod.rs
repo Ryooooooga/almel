@@ -7,6 +7,7 @@ pub mod shell;
 pub mod status;
 pub mod time;
 pub mod user;
+pub mod venv;
 
 use failure::Error;
 use lazy_static::lazy_static;
@@ -65,6 +66,9 @@ pub struct Config {
     pub duration: duration::Config,
 
     #[serde(default)]
+    pub venv: venv::Config,
+
+    #[serde(default)]
     pub segment_separators: ConfigSegmentSeparators,
 
     #[serde(default = "Config::default_segments")]
@@ -81,6 +85,7 @@ impl Config {
                 "directory",
                 "git_repo",
                 "git_user",
+                "venv",
             ],
             vec!["duration", "status"],
         ]
