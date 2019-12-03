@@ -4,13 +4,16 @@ use crate::segments::{Segment, SegmentError};
 pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
     let config = &context.config.git_user;
 
-    let repo = match &context.git_repo {
-        Some(repo) => repo,
+    let user = context
+        .git_repo
+        .as_ref()
+        .and_then(|repo| repo.config().ok())
+        .and_then(|config| config.get_string("user.name").ok());
+
+    let user = match user {
+        Some(user) => user,
         None => return Ok(None),
     };
-
-    let git_config = repo.config()?;
-    let user = git_config.get_string("user.name")?;
 
     Ok(Some(Segment {
         background: config.background,
