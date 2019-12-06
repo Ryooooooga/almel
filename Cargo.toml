@@ -10,7 +10,7 @@ keywords = ["zsh", "prompt"]
 edition = "2018"
 
 [dependencies]
-chrono = "0.3.0"
+chrono = "0.4"
 dirs = "2.0"
 failure = "0.1.6"
 hostname = "0.2"
