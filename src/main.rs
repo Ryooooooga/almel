@@ -1,4 +1,3 @@
-mod color;
 mod configs;
 mod context;
 mod init;

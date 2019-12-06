@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -18,10 +16,10 @@ pub struct Config {
 
 impl Config {
     fn default_background() -> Color {
-        color::BLACK
+        Color::Black
     }
     fn default_foreground() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_display_host() -> bool {
         true

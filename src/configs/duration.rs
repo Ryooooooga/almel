@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -17,10 +15,10 @@ pub struct Config {
 }
 impl Config {
     fn default_background() -> Color {
-        color::CYAN
+        Color::Cyan
     }
     fn default_foreground() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_icon() -> String {
         "\u{fa1a}".to_string() // nf-mdi-timer

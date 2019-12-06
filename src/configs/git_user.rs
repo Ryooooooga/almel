@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -17,10 +15,10 @@ pub struct Config {
 }
 impl Config {
     fn default_background() -> Color {
-        color::CYAN
+        Color::Cyan
     }
     fn default_foreground() -> Color {
-        color::BLACK
+        Color::Black
     }
     fn default_icon() -> String {
         "\u{f2c0}".to_string() // nf-fa-user_o

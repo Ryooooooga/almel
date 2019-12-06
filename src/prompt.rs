@@ -1,3 +1,4 @@
+use ansi_term::Color;
 use failure::Error;
 
 use crate::configs::Config;
@@ -16,28 +17,43 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
             println!();
         }
 
-        let mut prev_bg = None;
+        let mut prev_bg: Option<Color> = None;
 
         for name in line {
             match segments::build_segment(&context, name) {
                 Ok(Some(segment)) => {
-                    if let Some(prev_bg) = &prev_bg {
+                    let fg = &segment.foreground;
+                    let bg = segment.background;
+
+                    if let Some(prev_bg) = prev_bg {
+                        let style = prev_bg.on(bg);
+
                         print!(
-                            "{}{}{}",
-                            shell.bg_color(segment.background),
-                            shell.fg_color(*prev_bg),
-                            separator
+                            "{}{}{}{}{}{}{}",
+                            shell.control_prefix(),
+                            style.prefix(),
+                            shell.control_suffix(),
+                            separator,
+                            shell.control_prefix(),
+                            style.suffix(),
+                            shell.control_suffix(),
                         );
                     }
 
+                    let style = fg.on(bg);
+
                     print!(
-                        "{}{} {} ",
-                        shell.bg_color(segment.background),
-                        shell.fg_color(segment.foreground),
+                        "{}{}{} {} {}{}{}",
+                        shell.control_prefix(),
+                        style.prefix(),
+                        shell.control_suffix(),
                         segment.content,
+                        shell.control_prefix(),
+                        style.suffix(),
+                        shell.control_suffix(),
                     );
 
-                    prev_bg = Some(segment.background);
+                    prev_bg = Some(bg);
                 }
                 Ok(None) => {}
                 Err(error) => {
@@ -47,16 +63,22 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
         }
 
         if let Some(prev_bg) = prev_bg {
+            let style = prev_bg.normal();
+
             print!(
-                "{}{}{}",
-                shell.reset_styles(),
-                shell.fg_color(prev_bg),
-                separator
+                "{}{}{}{}{}{}{}",
+                shell.control_prefix(),
+                style.prefix(),
+                shell.control_suffix(),
+                separator,
+                shell.control_prefix(),
+                style.suffix(),
+                shell.control_suffix(),
             );
         }
     }
 
-    print!("{} ", shell.reset_styles());
+    print!(" ");
 
     Ok(())
 }

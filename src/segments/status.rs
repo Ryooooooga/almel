@@ -1,4 +1,3 @@
-use crate::color::Color;
 use crate::context::Context;
 use crate::segments::Segment;
 
@@ -15,8 +14,8 @@ fn is_root_user() -> bool {
 pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.status;
 
-    let background: Color;
-    let foreground: Color;
+    let background;
+    let foreground;
     let mut content = String::new();
 
     if context.opt.exit_status == 0 {

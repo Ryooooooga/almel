@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -147,10 +145,10 @@ pub struct ConfigClean {
 }
 impl ConfigClean {
     fn default_background() -> Color {
-        color::GREEN
+        Color::Green
     }
     fn default_foreground() -> Color {
-        color::BLACK
+        Color::Black
     }
 }
 impl Default for ConfigClean {
@@ -172,10 +170,10 @@ pub struct ConfigUnstaged {
 }
 impl ConfigUnstaged {
     fn default_background() -> Color {
-        color::YELLOW
+        Color::Yellow
     }
     fn default_foreground() -> Color {
-        color::BLACK
+        Color::Black
     }
 }
 impl Default for ConfigUnstaged {
@@ -197,10 +195,10 @@ pub struct ConfigStaged {
 }
 impl ConfigStaged {
     fn default_background() -> Color {
-        color::GREEN
+        Color::Green
     }
     fn default_foreground() -> Color {
-        color::BLACK
+        Color::Black
     }
 }
 impl Default for ConfigStaged {
@@ -222,10 +220,10 @@ pub struct ConfigConflicted {
 }
 impl ConfigConflicted {
     fn default_background() -> Color {
-        color::RED
+        Color::Red
     }
     fn default_foreground() -> Color {
-        color::BLACK
+        Color::Black
     }
 }
 impl Default for ConfigConflicted {

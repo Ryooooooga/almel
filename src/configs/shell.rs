@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -38,10 +36,10 @@ pub struct ConfigBash {
 }
 impl ConfigBash {
     fn default_background() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_foreground() -> Color {
-        color::GREEN
+        Color::Green
     }
     fn default_icon() -> String {
         "Bash".to_string()
@@ -70,10 +68,10 @@ pub struct ConfigZsh {
 }
 impl ConfigZsh {
     fn default_background() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_foreground() -> Color {
-        color::GREEN
+        Color::Green
     }
     fn default_icon() -> String {
         "Zsh".to_string()
@@ -102,10 +100,10 @@ pub struct ConfigFish {
 }
 impl ConfigFish {
     fn default_background() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_foreground() -> Color {
-        color::GREEN
+        Color::Green
     }
     fn default_icon() -> String {
         "\u{f739}".to_string() // nf-mdi-fish

@@ -9,9 +9,9 @@ mod time;
 mod user;
 mod venv;
 
+use ansi_term::Color;
 use failure::{format_err, Error};
 
-use crate::color::Color;
 use crate::context::Context;
 
 #[derive(Debug)]

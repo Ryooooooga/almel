@@ -1,8 +1,6 @@
+use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
-
-use crate::color;
-use crate::color::Color;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -41,10 +39,10 @@ pub struct ConfigLinux {
 
 impl ConfigLinux {
     fn default_background() -> Color {
-        color::CYAN
+        Color::Cyan
     }
     fn default_foreground() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_icon() -> String {
         "\u{f17c}".to_string() // nf-fa-linux
@@ -76,10 +74,10 @@ pub struct ConfigMac {
 
 impl ConfigMac {
     fn default_background() -> Color {
-        color::CYAN
+        Color::Cyan
     }
     fn default_foreground() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_icon() -> String {
         "\u{f179}".to_string() // nf-fa-apple
@@ -111,10 +109,10 @@ pub struct ConfigWindows {
 
 impl ConfigWindows {
     fn default_background() -> Color {
-        color::CYAN
+        Color::Cyan
     }
     fn default_foreground() -> Color {
-        color::WHITE
+        Color::White
     }
     fn default_icon() -> String {
         "\u{f17a}".to_string() // nf-fa-windows

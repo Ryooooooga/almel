@@ -1,7 +1,7 @@
+use ansi_term::Color;
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use lazy_static::lazy_static;
 
-use crate::color::Color;
 use crate::configs::git_repo::Config;
 use crate::context::Context;
 use crate::segments::Segment;
