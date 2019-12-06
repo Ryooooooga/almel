@@ -19,8 +19,11 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         .map(|u| u.to_string_lossy())
         .unwrap_or_else(|| Cow::from("?"));
 
-    let hostname = hostname::get_hostname();
-    let hostname = hostname.as_ref().map(|h| h.as_str()).unwrap_or("?");
+    let hostname = hostname::get();
+    let hostname = hostname
+        .as_ref()
+        .map(|h| h.to_string_lossy())
+        .unwrap_or_else(|_| Cow::from("?"));
 
     let content;
     if config.display_host {

@@ -1,4 +1,4 @@
-use chrono::{Local, UTC};
+use chrono::{Local, Utc};
 
 use crate::context::Context;
 use crate::segments::{Segment, SegmentError};
@@ -7,7 +7,7 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
     let config = &context.config.time;
 
     let content = if config.utc {
-        UTC::now().format(&config.format).to_string()
+        Utc::now().format(&config.format).to_string()
     } else {
         Local::now().format(&config.format).to_string()
     };
