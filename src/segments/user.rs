@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
 #[cfg(target_os = "windows")]
 mod users {
@@ -10,7 +10,7 @@ mod users {
     }
 }
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.user;
 
     let username = users::get_current_username();
@@ -32,9 +32,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         content = format!("{}", username)
     };
 
-    Ok(Some(Segment {
+    Some(Segment {
         background: config.background,
         foreground: config.foreground,
         content,
-    }))
+    })
 }

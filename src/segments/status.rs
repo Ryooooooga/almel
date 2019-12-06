@@ -1,6 +1,6 @@
 use crate::color::Color;
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
 #[cfg(target_os = "windows")]
 fn is_root_user() -> bool {
@@ -12,7 +12,7 @@ fn is_root_user() -> bool {
     users::get_current_uid() == 0
 }
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.status;
 
     let background: Color;
@@ -41,9 +41,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         content += &format!(" {}", config.icons.jobs);
     }
 
-    Ok(Some(Segment {
+    Some(Segment {
         background,
         foreground,
         content,
-    }))
+    })
 }

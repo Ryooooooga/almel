@@ -1,5 +1,5 @@
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
 fn render_duration(duration: f64) -> String {
     static MICRO_SEC: f64 = 1e-6;
@@ -53,17 +53,17 @@ fn test_render_duration() {
     assert_eq!(render_duration(123.456_789), "123s");
 }
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.duration;
     let duration = context.opt.duration;
 
-    if duration <= 0.0 {
-        return Ok(None);
+    if duration > 0.0 {
+        Some(Segment {
+            background: config.background,
+            foreground: config.foreground,
+            content: format!("{}{}", config.icon, render_duration(duration)),
+        })
+    } else {
+        None
     }
-
-    Ok(Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
-        content: format!("{}{}", config.icon, render_duration(duration)),
-    }))
 }

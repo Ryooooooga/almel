@@ -1,8 +1,8 @@
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 use crate::shell::Shell;
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.shell;
     let shell = &context.opt.shell;
 
@@ -24,5 +24,5 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         },
     };
 
-    Ok(Some(segment))
+    Some(segment)
 }
