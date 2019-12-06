@@ -1,35 +1,19 @@
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
-#[cfg(target_os = "linux")]
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
+    #[cfg(target_os = "linux")]
     let config = &context.config.os.linux;
 
-    Ok(Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
-        content: config.icon.clone(),
-    }))
-}
-
-#[cfg(target_os = "macos")]
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+    #[cfg(target_os = "macos")]
     let config = &context.config.os.mac;
 
-    Ok(Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
-        content: config.icon.clone(),
-    }))
-}
-
-#[cfg(target_os = "windows")]
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+    #[cfg(target_os = "windows")]
     let config = &context.config.os.windows;
 
-    Ok(Some(Segment {
+    Some(Segment {
         background: config.background,
         foreground: config.foreground,
         content: config.icon.clone(),
-    }))
+    })
 }

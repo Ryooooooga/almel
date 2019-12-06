@@ -1,9 +1,9 @@
 use chrono::{Local, Utc};
 
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.time;
 
     let content = if config.utc {
@@ -12,9 +12,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         Local::now().format(&config.format).to_string()
     };
 
-    Ok(Some(Segment {
+    Some(Segment {
         background: config.background,
         foreground: config.foreground,
         content,
-    }))
+    })
 }

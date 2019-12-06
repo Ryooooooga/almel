@@ -4,7 +4,7 @@ use lazy_static::lazy_static;
 use crate::color::Color;
 use crate::configs::git_repo::Config;
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
 lazy_static! {
     static ref STATUS_CONFLICTED: Status = Status::CONFLICTED;
@@ -154,14 +154,10 @@ fn get_colors(config: &Config, statuses: Status) -> (Color, Color) {
     }
 }
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.git_repo;
 
-    let repo = match &context.git_repo {
-        Some(repo) => repo,
-        None => return Ok(None),
-    };
-
+    let repo = context.git_repo.as_ref()?;
     let head = repo.head().ok();
     let statuses = get_repo_statuses(repo);
 
@@ -189,9 +185,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
 
     let (background, foreground) = get_colors(config, statuses);
 
-    Ok(Some(Segment {
+    Some(Segment {
         background,
         foreground,
         content,
-    }))
+    })
 }

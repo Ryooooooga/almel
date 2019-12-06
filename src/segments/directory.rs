@@ -1,9 +1,9 @@
 use std::path::PathBuf;
 
 use crate::context::Context;
-use crate::segments::{Segment, SegmentError};
+use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError> {
+pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.directory;
 
     let mut cwd = context.current_dir.as_path();
@@ -47,9 +47,9 @@ pub fn build_segment(context: &Context) -> Result<Option<Segment>, SegmentError>
         dir.push(cwd);
     }
 
-    Ok(Some(Segment {
+    Some(Segment {
         background,
         foreground,
         content: dir.to_string_lossy().to_string(),
-    }))
+    })
 }
