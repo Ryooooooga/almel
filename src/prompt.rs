@@ -1,10 +1,59 @@
 use ansi_term::Color;
 use failure::Error;
 
-use crate::configs::Config;
+use crate::configs::{Config, SegmentStyle};
 use crate::context::Context;
 use crate::opt::PromptArgs;
 use crate::segments;
+use crate::shell::Shell;
+
+fn display_content(shell: &Shell, style: &SegmentStyle, content: &str) {
+    // Convert to ansi_term::Style
+    let style = style.foreground.on(style.background);
+
+    print!(
+        "{}{}{} {} {}{}{}",
+        shell.control_prefix(),
+        style.prefix(),
+        shell.control_suffix(),
+        content,
+        shell.control_prefix(),
+        style.suffix(),
+        shell.control_suffix(),
+    );
+}
+
+fn display_separator(shell: &Shell, style: &SegmentStyle, last_bg: Color, separator: &str) {
+    // Convert to ansi_term::Style
+    let style = last_bg.on(style.background);
+
+    print!(
+        "{}{}{}{}{}{}{}",
+        shell.control_prefix(),
+        style.prefix(),
+        shell.control_suffix(),
+        separator,
+        shell.control_prefix(),
+        style.suffix(),
+        shell.control_suffix(),
+    );
+}
+
+fn display_closure(shell: &Shell, last_bg: Color, separator: &str) {
+    // Convert to ansi_term::Style
+    let style = last_bg.normal();
+
+    print!(
+        "{}{}{}{}{}{}{}",
+        shell.control_prefix(),
+        style.prefix(),
+        shell.control_suffix(),
+        separator,
+        shell.control_prefix(),
+        style.suffix(),
+        shell.control_suffix(),
+    );
+}
 
 pub fn run(args: &PromptArgs) -> Result<(), Error> {
     let config = Config::load_from_file_or_create_default(Config::config_path())?;
@@ -17,43 +66,17 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
             println!();
         }
 
-        let mut prev_bg: Option<Color> = None;
+        let mut last_bg: Option<Color> = None;
 
         for name in line {
             match segments::build_segment(&context, name) {
                 Ok(Some(segment)) => {
-                    let fg = &segment.style.foreground;
-                    let bg = segment.style.background;
-
-                    if let Some(prev_bg) = prev_bg {
-                        let style = prev_bg.on(bg);
-
-                        print!(
-                            "{}{}{}{}{}{}{}",
-                            shell.control_prefix(),
-                            style.prefix(),
-                            shell.control_suffix(),
-                            separator,
-                            shell.control_prefix(),
-                            style.suffix(),
-                            shell.control_suffix(),
-                        );
+                    if let Some(last_bg) = last_bg {
+                        display_separator(shell, &segment.style, last_bg, separator);
                     }
 
-                    let style = fg.on(bg);
-
-                    print!(
-                        "{}{}{} {} {}{}{}",
-                        shell.control_prefix(),
-                        style.prefix(),
-                        shell.control_suffix(),
-                        segment.content,
-                        shell.control_prefix(),
-                        style.suffix(),
-                        shell.control_suffix(),
-                    );
-
-                    prev_bg = Some(bg);
+                    display_content(shell, &segment.style, &segment.content);
+                    last_bg = Some(segment.style.background);
                 }
                 Ok(None) => {}
                 Err(error) => {
@@ -62,19 +85,8 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
             };
         }
 
-        if let Some(prev_bg) = prev_bg {
-            let style = prev_bg.normal();
-
-            print!(
-                "{}{}{}{}{}{}{}",
-                shell.control_prefix(),
-                style.prefix(),
-                shell.control_suffix(),
-                separator,
-                shell.control_prefix(),
-                style.suffix(),
-                shell.control_suffix(),
-            );
+        if let Some(last_bg) = last_bg {
+            display_closure(shell, last_bg, separator);
         }
     }
 
