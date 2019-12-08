@@ -1,8 +1,9 @@
-use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 
-#[derive(Debug, Serialize, Deserialize)]
+use crate::configs::SegmentStyle;
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     #[serde(default)]
     pub linux: ConfigLinux,
@@ -14,36 +15,17 @@ pub struct Config {
     pub windows: ConfigWindows,
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            linux: ConfigLinux::default(),
-            mac: ConfigMac::default(),
-            windows: ConfigWindows::default(),
-        }
-    }
-}
-
 // Linux
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigLinux {
-    #[serde(default = "ConfigLinux::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigLinux::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigLinux::default_icon")]
     pub icon: String,
 }
 
 impl ConfigLinux {
-    fn default_background() -> Color {
-        Color::Cyan
-    }
-    fn default_foreground() -> Color {
-        Color::White
-    }
     fn default_icon() -> String {
         "\u{f17c}".to_string() // nf-fa-linux
     }
@@ -52,8 +34,7 @@ impl ConfigLinux {
 impl Default for ConfigLinux {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }
@@ -62,23 +43,14 @@ impl Default for ConfigLinux {
 // Mac
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigMac {
-    #[serde(default = "ConfigMac::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigMac::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigMac::default_icon")]
     pub icon: String,
 }
 
 impl ConfigMac {
-    fn default_background() -> Color {
-        Color::Cyan
-    }
-    fn default_foreground() -> Color {
-        Color::White
-    }
     fn default_icon() -> String {
         "\u{f179}".to_string() // nf-fa-apple
     }
@@ -87,8 +59,7 @@ impl ConfigMac {
 impl Default for ConfigMac {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }
@@ -97,23 +68,14 @@ impl Default for ConfigMac {
 // Windows
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigWindows {
-    #[serde(default = "ConfigWindows::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigWindows::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigWindows::default_icon")]
     pub icon: String,
 }
 
 impl ConfigWindows {
-    fn default_background() -> Color {
-        Color::Cyan
-    }
-    fn default_foreground() -> Color {
-        Color::White
-    }
     fn default_icon() -> String {
         "\u{f17a}".to_string() // nf-fa-windows
     }
@@ -122,8 +84,7 @@ impl ConfigWindows {
 impl Default for ConfigWindows {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }

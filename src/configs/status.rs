@@ -1,8 +1,9 @@
-use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 
-#[derive(Debug, Serialize, Deserialize)]
+use crate::configs::SegmentStyle;
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     #[serde(default)]
     pub icons: ConfigIcons,
@@ -12,15 +13,6 @@ pub struct Config {
 
     #[serde(default)]
     pub failed: ConfigFailed,
-}
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            icons: ConfigIcons::default(),
-            succeeded: ConfigSucceeded::default(),
-            failed: ConfigFailed::default(),
-        }
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -62,49 +54,21 @@ impl Default for ConfigIcons {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigSucceeded {
-    #[serde(default = "ConfigSucceeded::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigSucceeded::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigSucceeded {
-    fn default_background() -> Color {
-        Color::White
-    }
-    fn default_foreground() -> Color {
-        Color::Blue
-    }
-}
-impl Default for ConfigSucceeded {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigFailed {
-    #[serde(default = "ConfigFailed::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigFailed::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigFailed::default_display_exit_status")]
     pub display_exit_status: bool,
 }
 impl ConfigFailed {
-    fn default_background() -> Color {
-        Color::Red
-    }
-    fn default_foreground() -> Color {
-        Color::White
-    }
     fn default_display_exit_status() -> bool {
         true
     }
@@ -112,8 +76,7 @@ impl ConfigFailed {
 impl Default for ConfigFailed {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             display_exit_status: Self::default_display_exit_status(),
         }
     }

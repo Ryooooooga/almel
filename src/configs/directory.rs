@@ -1,6 +1,7 @@
-use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
+
+use crate::configs::SegmentStyle;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -24,62 +25,24 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            normal: ConfigNormal::default(),
-            error: ConfigError::default(),
+            normal: Default::default(),
+            error: Default::default(),
             home: Self::default_home(),
-            shrink: ConfigShrink::default(),
+            shrink: Default::default(),
         }
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigNormal {
-    #[serde(default = "ConfigNormal::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigNormal::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigNormal {
-    fn default_background() -> Color {
-        Color::Blue
-    }
-    fn default_foreground() -> Color {
-        Color::Black
-    }
-}
-impl Default for ConfigNormal {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigError {
-    #[serde(default = "ConfigError::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigError::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigError {
-    fn default_background() -> Color {
-        Color::Red
-    }
-    fn default_foreground() -> Color {
-        Color::Black
-    }
-}
-impl Default for ConfigError {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

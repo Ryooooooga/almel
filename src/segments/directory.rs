@@ -9,10 +9,10 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     let mut cwd = context.current_dir.as_path();
     let mut dir = PathBuf::new();
 
-    let (background, foreground) = if cwd.is_dir() {
-        (config.normal.background, config.normal.foreground)
+    let style = if cwd.is_dir() {
+        &config.normal.style
     } else {
-        (config.error.background, config.error.foreground)
+        &config.error.style
     };
 
     // Replace home
@@ -48,8 +48,8 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     }
 
     Some(Segment {
-        background,
-        foreground,
+        background: style.background,
+        foreground: style.foreground,
         content: dir.to_string_lossy().to_string(),
     })
 }

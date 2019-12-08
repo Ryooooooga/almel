@@ -1,25 +1,17 @@
-use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 
+use crate::configs::SegmentStyle;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    #[serde(default = "Config::default_background")]
-    pub background: Color,
-
-    #[serde(default = "Config::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "Config::default_icon")]
     pub icon: String,
 }
 impl Config {
-    fn default_background() -> Color {
-        Color::Cyan
-    }
-    fn default_foreground() -> Color {
-        Color::White
-    }
     fn default_icon() -> String {
         "\u{fa1a}".to_string() // nf-mdi-timer
     }
@@ -27,8 +19,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }

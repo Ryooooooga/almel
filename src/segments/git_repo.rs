@@ -1,4 +1,3 @@
-use ansi_term::Color;
 use git2::{BranchType, Oid, Reference, Repository, Status, StatusOptions};
 use lazy_static::lazy_static;
 
@@ -142,18 +141,6 @@ fn build_remote_status<'a>(
     Some(status)
 }
 
-fn get_colors(config: &Config, statuses: Status) -> (Color, Color) {
-    if statuses.intersects(*STATUS_CONFLICTED) {
-        (config.conflicted.background, config.conflicted.foreground)
-    } else if statuses.intersects(*STATUS_UNSTAGED) {
-        (config.unstaged.background, config.unstaged.foreground)
-    } else if statuses.intersects(*STATUS_STAGED) {
-        (config.staged.background, config.staged.foreground)
-    } else {
-        (config.clean.background, config.clean.foreground)
-    }
-}
-
 pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.git_repo;
 
@@ -183,11 +170,19 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
         content += &format!(" {}", remote_status);
     }
 
-    let (background, foreground) = get_colors(config, statuses);
+    let style = if statuses.intersects(*STATUS_CONFLICTED) {
+        &config.conflicted.style
+    } else if statuses.intersects(*STATUS_UNSTAGED) {
+        &config.unstaged.style
+    } else if statuses.intersects(*STATUS_STAGED) {
+        &config.staged.style
+    } else {
+        &config.clean.style
+    };
 
     Some(Segment {
-        background,
-        foreground,
+        background: style.background,
+        foreground: style.foreground,
         content,
     })
 }

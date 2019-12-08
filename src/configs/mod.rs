@@ -9,6 +9,7 @@ pub mod time;
 pub mod user;
 pub mod venv;
 
+use ansi_term::Color;
 use failure::Error;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
@@ -16,6 +17,32 @@ use std::default::Default;
 use std::fs::{create_dir_all, File};
 use std::io::prelude::Write; // File#write_all
 use std::path::{Path, PathBuf};
+
+// SegmentStyle
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SegmentStyle {
+    #[serde(default = "SegmentStyle::default_foreground")]
+    pub foreground: Color,
+
+    #[serde(default = "SegmentStyle::default_background")]
+    pub background: Color,
+}
+impl SegmentStyle {
+    fn default_foreground() -> Color {
+        Color::White
+    }
+    fn default_background() -> Color {
+        Color::Black
+    }
+}
+impl Default for SegmentStyle {
+    fn default() -> Self {
+        Self {
+            foreground: Self::default_foreground(),
+            background: Self::default_background(),
+        }
+    }
+}
 
 // Separators
 #[derive(Debug, Serialize, Deserialize)]

@@ -1,8 +1,9 @@
-use ansi_term::Color;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 
-#[derive(Debug, Serialize, Deserialize)]
+use crate::configs::SegmentStyle;
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     #[serde(default)]
     pub bash: ConfigBash,
@@ -13,34 +14,16 @@ pub struct Config {
     #[serde(default)]
     pub fish: ConfigFish,
 }
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            bash: ConfigBash::default(),
-            zsh: ConfigZsh::default(),
-            fish: ConfigFish::default(),
-        }
-    }
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigBash {
-    #[serde(default = "ConfigBash::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigBash::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigBash::default_icon")]
     pub icon: String,
 }
 impl ConfigBash {
-    fn default_background() -> Color {
-        Color::White
-    }
-    fn default_foreground() -> Color {
-        Color::Green
-    }
     fn default_icon() -> String {
         "Bash".to_string()
     }
@@ -48,8 +31,7 @@ impl ConfigBash {
 impl Default for ConfigBash {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }
@@ -57,22 +39,13 @@ impl Default for ConfigBash {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigZsh {
-    #[serde(default = "ConfigZsh::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigZsh::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigZsh::default_icon")]
     pub icon: String,
 }
 impl ConfigZsh {
-    fn default_background() -> Color {
-        Color::White
-    }
-    fn default_foreground() -> Color {
-        Color::Green
-    }
     fn default_icon() -> String {
         "Zsh".to_string()
     }
@@ -80,8 +53,7 @@ impl ConfigZsh {
 impl Default for ConfigZsh {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }
@@ -89,22 +61,13 @@ impl Default for ConfigZsh {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ConfigFish {
-    #[serde(default = "ConfigFish::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigFish::default_foreground")]
-    pub foreground: Color,
+    #[serde(default)]
+    pub style: SegmentStyle,
 
     #[serde(default = "ConfigFish::default_icon")]
     pub icon: String,
 }
 impl ConfigFish {
-    fn default_background() -> Color {
-        Color::White
-    }
-    fn default_foreground() -> Color {
-        Color::Green
-    }
     fn default_icon() -> String {
         "\u{f739}".to_string() // nf-mdi-fish
     }
@@ -112,8 +75,7 @@ impl ConfigFish {
 impl Default for ConfigFish {
     fn default() -> Self {
         Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
+            style: Default::default(),
             icon: Self::default_icon(),
         }
     }

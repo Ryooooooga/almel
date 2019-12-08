@@ -14,17 +14,14 @@ fn is_root_user() -> bool {
 pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.status;
 
-    let background;
-    let foreground;
+    let style;
     let mut content = String::new();
 
     if context.opt.exit_status == 0 {
-        background = config.succeeded.background;
-        foreground = config.succeeded.foreground;
+        style = &config.succeeded.style;
         content += &config.icons.succeeded;
     } else {
-        background = config.failed.background;
-        foreground = config.failed.foreground;
+        style = &config.failed.style;
         content += &config.icons.failed;
 
         if config.failed.display_exit_status {
@@ -41,8 +38,8 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     }
 
     Some(Segment {
-        background,
-        foreground,
+        background: style.background,
+        foreground: style.foreground,
         content,
     })
 }

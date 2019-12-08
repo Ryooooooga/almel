@@ -9,8 +9,8 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     let user = git_config.get_string("user.name").ok()?;
 
     Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
+        background: config.style.background,
+        foreground: config.style.foreground,
         content: format!("{} {}", config.icon, user),
     })
 }

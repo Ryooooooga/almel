@@ -59,8 +59,8 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
 
     if duration > 0.0 {
         Some(Segment {
-            background: config.background,
-            foreground: config.foreground,
+            background: config.style.background,
+            foreground: config.style.foreground,
             content: format!("{}{}", config.icon, render_duration(duration)),
         })
     } else {
