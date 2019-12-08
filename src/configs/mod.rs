@@ -19,16 +19,16 @@ use std::path::{Path, PathBuf};
 
 // Separators
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ConfigSegmentSeparators {
-    #[serde(default = "ConfigSegmentSeparators::default_left_solid")]
+pub struct SegmentSeparators {
+    #[serde(default = "SegmentSeparators::default_left_solid")]
     pub left_solid: String,
 }
-impl ConfigSegmentSeparators {
+impl SegmentSeparators {
     fn default_left_solid() -> String {
         "\u{e0b0}".to_string() // nf-pl-left_hard_divider
     }
 }
-impl Default for ConfigSegmentSeparators {
+impl Default for SegmentSeparators {
     fn default() -> Self {
         Self {
             left_solid: Self::default_left_solid(),
@@ -69,7 +69,7 @@ pub struct Config {
     pub venv: venv::Config,
 
     #[serde(default)]
-    pub segment_separators: ConfigSegmentSeparators,
+    pub segment_separators: SegmentSeparators,
 
     #[serde(default = "Config::default_segments")]
     pub segments: Vec<Vec<String>>,
