@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.directory;
 
     let mut cwd = context.current_dir.as_path();
@@ -48,8 +48,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     }
 
     Some(Segment {
-        background: style.background,
-        foreground: style.foreground,
+        style,
         content: dir.to_string_lossy().to_string(),
     })
 }

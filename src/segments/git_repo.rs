@@ -141,7 +141,7 @@ fn build_remote_status<'a>(
     Some(status)
 }
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.git_repo;
 
     let repo = context.git_repo.as_ref()?;
@@ -180,9 +180,5 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
         &config.clean.style
     };
 
-    Some(Segment {
-        background: style.background,
-        foreground: style.foreground,
-        content,
-    })
+    Some(Segment { style, content })
 }

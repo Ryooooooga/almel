@@ -9,19 +9,21 @@ mod time;
 mod user;
 mod venv;
 
-use ansi_term::Color;
 use failure::{format_err, Error};
 
+use crate::configs::SegmentStyle;
 use crate::context::Context;
 
 #[derive(Debug)]
-pub struct Segment {
-    pub background: Color,
-    pub foreground: Color,
+pub struct Segment<'a> {
+    pub style: &'a SegmentStyle,
     pub content: String,
 }
 
-pub fn build_segment(context: &Context, name: &str) -> Result<Option<Segment>, Error> {
+pub fn build_segment<'ctx>(
+    context: &'ctx Context,
+    name: &str,
+) -> Result<Option<Segment<'ctx>>, Error> {
     match name {
         "os" => Ok(os::build_segment(&context)),
         "shell" => Ok(shell::build_segment(&context)),

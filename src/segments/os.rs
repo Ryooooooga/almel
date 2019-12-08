@@ -1,7 +1,7 @@
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     #[cfg(target_os = "linux")]
     let config = &context.config.os.linux;
 
@@ -12,8 +12,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     let config = &context.config.os.windows;
 
     Some(Segment {
-        background: config.style.background,
-        foreground: config.style.foreground,
+        style: &config.style,
         content: config.icon.clone(),
     })
 }

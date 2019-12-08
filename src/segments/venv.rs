@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.venv;
 
     let venv = env::var_os("VIRTUAL_ENV").map(PathBuf::from)?;
@@ -16,8 +16,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
         .unwrap_or_else(|| Cow::from("?"));
 
     Some(Segment {
-        background: config.style.background,
-        foreground: config.style.foreground,
+        style: &config.style,
         content: format!("{} {}", config.icon, env_name),
     })
 }

@@ -11,7 +11,7 @@ fn is_root_user() -> bool {
     users::get_current_uid() == 0
 }
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.status;
 
     let style;
@@ -37,9 +37,5 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
         content += &format!(" {}", config.icons.jobs);
     }
 
-    Some(Segment {
-        background: style.background,
-        foreground: style.foreground,
-        content,
-    })
+    Some(Segment { style, content })
 }

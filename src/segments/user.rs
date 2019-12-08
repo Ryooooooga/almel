@@ -10,7 +10,7 @@ mod users {
     }
 }
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.user;
 
     let username = users::get_current_username();
@@ -33,8 +33,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     };
 
     Some(Segment {
-        background: config.style.background,
-        foreground: config.style.foreground,
+        style: &config.style,
         content,
     })
 }

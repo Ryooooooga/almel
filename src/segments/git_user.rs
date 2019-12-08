@@ -1,7 +1,7 @@
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.git_user;
 
     let repo = context.git_repo.as_ref()?;
@@ -9,8 +9,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     let user = git_config.get_string("user.name").ok()?;
 
     Some(Segment {
-        background: config.style.background,
-        foreground: config.style.foreground,
+        style: &config.style,
         content: format!("{} {}", config.icon, user),
     })
 }

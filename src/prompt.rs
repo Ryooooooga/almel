@@ -22,8 +22,8 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
         for name in line {
             match segments::build_segment(&context, name) {
                 Ok(Some(segment)) => {
-                    let fg = &segment.foreground;
-                    let bg = segment.background;
+                    let fg = &segment.style.foreground;
+                    let bg = segment.style.background;
 
                     if let Some(prev_bg) = prev_bg {
                         let style = prev_bg.on(bg);
