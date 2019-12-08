@@ -49,16 +49,23 @@ impl Default for SegmentStyle {
 pub struct SegmentSeparators {
     #[serde(default = "SegmentSeparators::default_left_solid")]
     pub left_solid: String,
+
+    #[serde(default = "SegmentSeparators::default_left_wire")]
+    pub left_wire: String,
 }
 impl SegmentSeparators {
     fn default_left_solid() -> String {
         "\u{e0b0}".to_string() // nf-pl-left_hard_divider
+    }
+    fn default_left_wire() -> String {
+        "\u{e0b1}".to_string() // nf-pl-left_soft_divider
     }
 }
 impl Default for SegmentSeparators {
     fn default() -> Self {
         Self {
             left_solid: Self::default_left_solid(),
+            left_wire: Self::default_left_wire(),
         }
     }
 }
