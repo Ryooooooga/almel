@@ -53,14 +53,13 @@ fn test_render_duration() {
     assert_eq!(render_duration(123.456_789), "123s");
 }
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.duration;
     let duration = context.opt.duration;
 
     if duration > 0.0 {
         Some(Segment {
-            background: config.background,
-            foreground: config.foreground,
+            style: &config.style,
             content: format!("{}{}", config.icon, render_duration(duration)),
         })
     } else {

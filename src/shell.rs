@@ -1,8 +1,6 @@
 use lazy_static::lazy_static;
 use structopt::clap::arg_enum;
 
-use crate::color::Color;
-
 arg_enum! {
     #[derive(Debug)]
     pub enum Shell {
@@ -32,27 +30,19 @@ impl Shell {
         }
     }
 
-    pub fn bg_color(&self, color: Color) -> String {
+    pub fn control_prefix(&self) -> &'static str {
         match self {
-            Self::Bash => format!("\\[\u{001b}[48;5;{}m\\]", color),
-            Self::Zsh => format!("%{{\u{001b}[48;5;{}m%}}", color),
-            Self::Fish => format!("\u{001b}[48;5;{}m", color),
+            Self::Bash => r"\[",
+            Self::Zsh => r"%{",
+            Self::Fish => r"",
         }
     }
 
-    pub fn fg_color(&self, color: Color) -> String {
+    pub fn control_suffix(&self) -> &'static str {
         match self {
-            Self::Bash => format!("\\[\u{001b}[38;5;{}m\\]", color),
-            Self::Zsh => format!("%{{\u{001b}[38;5;{}m%}}", color),
-            Self::Fish => format!("\u{001b}[38;5;{}m", color),
-        }
-    }
-
-    pub fn reset_styles(&self) -> &'static str {
-        match self {
-            Self::Bash => "\\[\u{001b}[m\\]",
-            Self::Zsh => "%{\u{001b}[m%}",
-            Self::Fish => "\u{001b}[m",
+            Self::Bash => r"\]",
+            Self::Zsh => r"%}",
+            Self::Fish => r"",
         }
     }
 }

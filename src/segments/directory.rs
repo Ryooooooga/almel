@@ -3,16 +3,16 @@ use std::path::PathBuf;
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.directory;
 
     let mut cwd = context.current_dir.as_path();
     let mut dir = PathBuf::new();
 
-    let (background, foreground) = if cwd.is_dir() {
-        (config.normal.background, config.normal.foreground)
+    let style = if cwd.is_dir() {
+        &config.normal.style
     } else {
-        (config.error.background, config.error.foreground)
+        &config.error.style
     };
 
     // Replace home
@@ -48,8 +48,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     }
 
     Some(Segment {
-        background,
-        foreground,
+        style,
         content: dir.to_string_lossy().to_string(),
     })
 }

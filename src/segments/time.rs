@@ -3,7 +3,7 @@ use chrono::{Local, Utc};
 use crate::context::Context;
 use crate::segments::Segment;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.time;
 
     let content = if config.utc {
@@ -13,8 +13,7 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
     };
 
     Some(Segment {
-        background: config.background,
-        foreground: config.foreground,
+        style: &config.style,
         content,
     })
 }

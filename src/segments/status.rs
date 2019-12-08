@@ -1,4 +1,3 @@
-use crate::color::Color;
 use crate::context::Context;
 use crate::segments::Segment;
 
@@ -12,20 +11,17 @@ fn is_root_user() -> bool {
     users::get_current_uid() == 0
 }
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.status;
 
-    let background: Color;
-    let foreground: Color;
+    let style;
     let mut content = String::new();
 
     if context.opt.exit_status == 0 {
-        background = config.succeeded.background;
-        foreground = config.succeeded.foreground;
+        style = &config.succeeded.style;
         content += &config.icons.succeeded;
     } else {
-        background = config.failed.background;
-        foreground = config.failed.foreground;
+        style = &config.failed.style;
         content += &config.icons.failed;
 
         if config.failed.display_exit_status {
@@ -41,9 +37,5 @@ pub fn build_segment(context: &Context) -> Option<Segment> {
         content += &format!(" {}", config.icons.jobs);
     }
 
-    Some(Segment {
-        background,
-        foreground,
-        content,
-    })
+    Some(Segment { style, content })
 }

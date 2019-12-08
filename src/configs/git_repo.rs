@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 
-use crate::color;
-use crate::color::Color;
+use crate::configs::SegmentStyle;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -44,11 +43,11 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            icons: ConfigIcons::default(),
-            clean: ConfigClean::default(),
-            unstaged: ConfigUnstaged::default(),
-            staged: ConfigStaged::default(),
-            conflicted: ConfigConflicted::default(),
+            icons: Default::default(),
+            clean: Default::default(),
+            unstaged: Default::default(),
+            staged: Default::default(),
+            conflicted: Default::default(),
             display_master: Self::default_display_master(),
             display_tag: Self::default_display_tag(),
             commit_hash_len: Self::default_commit_hash_len(),
@@ -137,102 +136,26 @@ impl Default for ConfigIcons {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigClean {
-    #[serde(default = "ConfigClean::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigClean::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigClean {
-    fn default_background() -> Color {
-        color::GREEN
-    }
-    fn default_foreground() -> Color {
-        color::BLACK
-    }
-}
-impl Default for ConfigClean {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigUnstaged {
-    #[serde(default = "ConfigUnstaged::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigUnstaged::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigUnstaged {
-    fn default_background() -> Color {
-        color::YELLOW
-    }
-    fn default_foreground() -> Color {
-        color::BLACK
-    }
-}
-impl Default for ConfigUnstaged {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigStaged {
-    #[serde(default = "ConfigStaged::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigStaged::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigStaged {
-    fn default_background() -> Color {
-        color::GREEN
-    }
-    fn default_foreground() -> Color {
-        color::BLACK
-    }
-}
-impl Default for ConfigStaged {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ConfigConflicted {
-    #[serde(default = "ConfigConflicted::default_background")]
-    pub background: Color,
-
-    #[serde(default = "ConfigConflicted::default_foreground")]
-    pub foreground: Color,
-}
-impl ConfigConflicted {
-    fn default_background() -> Color {
-        color::RED
-    }
-    fn default_foreground() -> Color {
-        color::BLACK
-    }
-}
-impl Default for ConfigConflicted {
-    fn default() -> Self {
-        Self {
-            background: Self::default_background(),
-            foreground: Self::default_foreground(),
-        }
-    }
+    #[serde(default)]
+    pub style: SegmentStyle,
 }

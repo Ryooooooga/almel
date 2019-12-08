@@ -9,6 +9,7 @@ pub mod time;
 pub mod user;
 pub mod venv;
 
+use ansi_term::Color;
 use failure::Error;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
@@ -17,18 +18,44 @@ use std::fs::{create_dir_all, File};
 use std::io::prelude::Write; // File#write_all
 use std::path::{Path, PathBuf};
 
+// SegmentStyle
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SegmentStyle {
+    #[serde(default = "SegmentStyle::default_foreground")]
+    pub foreground: Color,
+
+    #[serde(default = "SegmentStyle::default_background")]
+    pub background: Color,
+}
+impl SegmentStyle {
+    fn default_foreground() -> Color {
+        Color::White
+    }
+    fn default_background() -> Color {
+        Color::Black
+    }
+}
+impl Default for SegmentStyle {
+    fn default() -> Self {
+        Self {
+            foreground: Self::default_foreground(),
+            background: Self::default_background(),
+        }
+    }
+}
+
 // Separators
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ConfigSegmentSeparators {
-    #[serde(default = "ConfigSegmentSeparators::default_left_solid")]
+pub struct SegmentSeparators {
+    #[serde(default = "SegmentSeparators::default_left_solid")]
     pub left_solid: String,
 }
-impl ConfigSegmentSeparators {
+impl SegmentSeparators {
     fn default_left_solid() -> String {
         "\u{e0b0}".to_string() // nf-pl-left_hard_divider
     }
 }
-impl Default for ConfigSegmentSeparators {
+impl Default for SegmentSeparators {
     fn default() -> Self {
         Self {
             left_solid: Self::default_left_solid(),
@@ -69,7 +96,7 @@ pub struct Config {
     pub venv: venv::Config,
 
     #[serde(default)]
-    pub segment_separators: ConfigSegmentSeparators,
+    pub segment_separators: SegmentSeparators,
 
     #[serde(default = "Config::default_segments")]
     pub segments: Vec<Vec<String>>,

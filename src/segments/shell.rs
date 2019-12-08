@@ -2,24 +2,21 @@ use crate::context::Context;
 use crate::segments::Segment;
 use crate::shell::Shell;
 
-pub fn build_segment(context: &Context) -> Option<Segment> {
+pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let config = &context.config.shell;
     let shell = &context.opt.shell;
 
     let segment = match shell {
         Shell::Bash => Segment {
-            background: config.bash.background,
-            foreground: config.bash.foreground,
+            style: &config.bash.style,
             content: config.bash.icon.clone(),
         },
         Shell::Zsh => Segment {
-            background: config.zsh.background,
-            foreground: config.zsh.foreground,
+            style: &config.zsh.style,
             content: config.zsh.icon.clone(),
         },
         Shell::Fish => Segment {
-            background: config.fish.background,
-            foreground: config.fish.foreground,
+            style: &config.fish.style,
             content: config.fish.icon.clone(),
         },
     };
