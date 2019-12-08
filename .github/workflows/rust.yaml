@@ -85,11 +85,35 @@ jobs:
           command: build
           args: --verbose --all --all-targets --all-features
 
+      - name: Build Release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose --all --all-targets --all-features
+
       - name: Run tests
         uses: actions-rs/cargo@v1
         with:
           command: test
           args: --verbose --all --all-targets --all-features
+
+      - name: Rename an asset
+        id: asset
+        run: |
+          if ${{ contains(matrix.toolchain, 'pc-windows') }}; then
+            EXE=.exe
+          fi
+          EXECUTABLE="./target/release/${GITHUB_REPOSITORY#*/}$EXE"
+          ASSET="${GITHUB_REPOSITORY#*/}-${GITHUB_SHA}-${{ matrix.toolchain }}$EXE"
+          mv "$EXECUTABLE" "./$ASSET"
+          echo "::set-output name=asset::$ASSET"
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ steps.asset.outputs.asset }}
+          path: ${{ steps.asset.outputs.asset }}
 
   release:
     strategy:
