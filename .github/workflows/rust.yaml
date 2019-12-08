@@ -3,9 +3,24 @@ name: Rust
 on: [push]
 
 jobs:
-  format:
-    name: Format
-    runs-on: ubuntu-latest
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+          - stable-x86_64-pc-windows-msvc
+          - stable-x86_64-apple-darwin
+          - stable-x86_64-unknown-linux-gnu
+        include:
+          - toolchain: stable-x86_64-pc-windows-msvc
+            os: windows-latest
+          - toolchain: stable-x86_64-apple-darwin
+            os: macOS-latest
+          - toolchain: stable-x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+
+    name: Lint - ${{ matrix.toolchain }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -14,7 +29,7 @@ jobs:
       - name: rust-toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable-x86_64-unknown-linux-gnu
+          toolchain: ${{ matrix.toolchain }}
           default: true
 
       - name: rustup component add
@@ -70,11 +85,35 @@ jobs:
           command: build
           args: --verbose --all --all-targets --all-features
 
+      - name: Build Release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --verbose --all --all-targets --all-features
+
       - name: Run tests
         uses: actions-rs/cargo@v1
         with:
           command: test
           args: --verbose --all --all-targets --all-features
+
+      - name: Rename an artifact
+        id: artifact
+        run: |
+          if ${{ contains(matrix.toolchain, 'pc-windows') }}; then
+            EXE=.exe
+          fi
+          EXECUTABLE="./target/release/${GITHUB_REPOSITORY#*/}$EXE"
+          ARTIFACT="${GITHUB_REPOSITORY#*/}-${GITHUB_SHA}-${{ matrix.toolchain }}$EXE"
+          mv "$EXECUTABLE" "./$ARTIFACT"
+          echo "::set-output name=artifact::$ARTIFACT"
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ steps.artifact.outputs.artifact }}
+          path: ${{ steps.artifact.outputs.artifact }}
 
   release:
     strategy:
@@ -94,7 +133,7 @@ jobs:
 
     name: Release - ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
-    needs: [format, build]
+    needs: [lint, build]
     if: startsWith(github.ref, 'refs/tags/')
 
     steps:
