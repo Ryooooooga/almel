@@ -97,23 +97,23 @@ jobs:
           command: test
           args: --verbose --all --all-targets --all-features
 
-      - name: Rename an asset
-        id: asset
+      - name: Rename an artifact
+        id: artifact
         run: |
           if ${{ contains(matrix.toolchain, 'pc-windows') }}; then
             EXE=.exe
           fi
           EXECUTABLE="./target/release/${GITHUB_REPOSITORY#*/}$EXE"
-          ASSET="${GITHUB_REPOSITORY#*/}-${GITHUB_SHA}-${{ matrix.toolchain }}$EXE"
-          mv "$EXECUTABLE" "./$ASSET"
-          echo "::set-output name=asset::$ASSET"
+          ARTIFACT="${GITHUB_REPOSITORY#*/}-${GITHUB_SHA}-${{ matrix.toolchain }}$EXE"
+          mv "$EXECUTABLE" "./$ARTIFACT"
+          echo "::set-output name=artifact::$ARTIFACT"
         shell: bash
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ steps.asset.outputs.asset }}
-          path: ${{ steps.asset.outputs.asset }}
+          name: ${{ steps.artifact.outputs.artifact }}
+          path: ${{ steps.artifact.outputs.artifact }}
 
   release:
     strategy:
