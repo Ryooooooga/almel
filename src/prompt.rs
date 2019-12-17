@@ -1,5 +1,4 @@
 use ansi_term::Color;
-use failure::Error;
 
 use crate::configs::{Config, SegmentSeparators, SegmentStyle};
 use crate::context::Context;
@@ -69,9 +68,14 @@ fn display_closure(shell: &Shell, last_bg: Color, separators: &SegmentSeparators
     );
 }
 
-pub fn run(args: &PromptArgs) -> Result<(), Error> {
-    let config = Config::load_from_file_or_create_default(Config::config_path())?;
-    let context = Context::new(args, &config)?;
+pub fn run(args: &PromptArgs) {
+    let config = Config::load_from_file_or_create_default(Config::config_path())
+        .map_err(|err| {
+            eprintln!("{}", err);
+        })
+        .unwrap_or_default();
+
+    let context = Context::new(args, &config);
     let shell = &context.opt.shell;
     let separators = &context.config.segment_separators;
 
@@ -105,6 +109,4 @@ pub fn run(args: &PromptArgs) -> Result<(), Error> {
     }
 
     print!(" ");
-
-    Ok(())
 }
