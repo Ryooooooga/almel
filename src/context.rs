@@ -1,4 +1,3 @@
-use failure::Error;
 use git2::Repository;
 use std::path::PathBuf;
 
@@ -13,19 +12,19 @@ pub struct Context<'ctx> {
 }
 
 impl<'ctx> Context<'ctx> {
-    pub fn new(opt: &'ctx PromptArgs, config: &'ctx Config) -> Result<Self, Error> {
+    pub fn new(opt: &'ctx PromptArgs, config: &'ctx Config) -> Self {
         let current_dir = std::env::var_os("PWD")
             .map(PathBuf::from)
             .or_else(|| std::env::current_dir().ok())
-            .expect("Could not estimate current directory");
+            .unwrap_or_default();
 
         let git_repo = Repository::discover(&current_dir).ok();
 
-        Ok(Self {
+        Self {
             current_dir,
             config,
             opt,
             git_repo,
-        })
+        }
     }
 }

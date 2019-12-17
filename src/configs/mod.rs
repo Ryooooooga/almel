@@ -128,6 +128,11 @@ impl Config {
         .collect()
     }
 }
+impl Default for Config {
+    fn default() -> Self {
+        serde_yaml::from_str(*DEFAULT_CONFIG_STR).unwrap()
+    }
+}
 
 type ConfigError = Error;
 

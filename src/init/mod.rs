@@ -1,9 +1,5 @@
-use failure::Error;
-
 use crate::opt::InitArgs;
 
-pub fn run(args: &InitArgs) -> Result<(), Error> {
+pub fn run(args: &InitArgs) {
     print!("{}", args.shell.init_script());
-
-    Ok(())
 }
