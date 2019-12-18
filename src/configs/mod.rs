@@ -179,7 +179,7 @@ impl Config {
     }
 
     pub fn config_path() -> PathBuf {
-        if let Some(path) = std::env::var_os("ALMEL_CONFIG_PATH").map(PathBuf::from) {
+        if let Some(path) = std::env::var_os("ALMEL_CONFIG_FILE").map(PathBuf::from) {
             path
         } else if let Some(config_home) = std::env::var_os("XDG_CONFIG_HOME").map(PathBuf::from) {
             let mut path = config_home;
