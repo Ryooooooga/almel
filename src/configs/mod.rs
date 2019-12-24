@@ -110,22 +110,19 @@ pub struct Config {
 }
 impl Config {
     fn default_segments() -> Vec<Vec<String>> {
-        [
+        vec![
             vec![
-                "os",
-                "shell",
-                "time",
-                "user",
-                "directory",
-                "git_repo",
-                "git_user",
-                "venv",
+                "os".to_string(),
+                "shell".to_string(),
+                "time".to_string(),
+                "user".to_string(),
+                "directory".to_string(),
+                "git_repo".to_string(),
+                "git_user".to_string(),
+                "venv".to_string(),
             ],
-            vec!["duration", "status"],
+            vec!["duration".to_string(), "status".to_string()],
         ]
-        .iter()
-        .map(|line| line.iter().map(|s| s.to_string()).collect())
-        .collect()
     }
 }
 impl Default for Config {
