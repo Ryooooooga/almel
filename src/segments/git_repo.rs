@@ -45,28 +45,32 @@ fn find_tag<'a>(repo: &'a Repository, oid: &Oid) -> Option<Reference<'a>> {
 }
 
 #[derive(Debug)]
-enum HeadStatus<'a> {
-    Branch(&'a str),
+enum HeadStatus {
+    Branch(String),
     Tag(String),
     Commit(String),
 }
 
-fn get_head_status<'a>(
-    repo: &'a Repository,
-    head: &'a Option<Reference>,
+fn get_head_status(
+    repo: &Repository,
+    head: &Option<Reference>,
     display_tag: bool,
     commit_hash_len: usize,
-) -> HeadStatus<'a> {
+) -> HeadStatus {
     let head = match head {
         Some(head) => head,
 
         // Empty repository
-        None => return HeadStatus::Branch("master"),
+        None => {
+            let config = repo.config().ok();
+            let default_branch = config.and_then(|c| c.get_string("init.defaultBranch").ok());
+            return HeadStatus::Branch(default_branch.unwrap_or("master".to_string()));
+        }
     };
 
     if head.is_branch() {
         // HEAD is a branch
-        return HeadStatus::Branch(head.shorthand().unwrap_or("?"));
+        return HeadStatus::Branch(head.shorthand().unwrap_or("?").to_string());
     }
 
     let oid = match head.target() {
@@ -156,7 +160,11 @@ pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
     let mut content = String::new();
 
     match &head_status {
-        HeadStatus::Branch("master") if !config.display_master => content += &config.icons.branch,
+        HeadStatus::Branch(name)
+            if !config.display_master && (name == "master" || name == "main") =>
+        {
+            content += &config.icons.branch
+        }
         HeadStatus::Branch(name) => content += &format!("{} {}", config.icons.branch, name),
         HeadStatus::Tag(name) => content += &format!("{} {}", config.icons.tag, name),
         HeadStatus::Commit(hash) => content += &format!("{} {}", config.icons.commit, hash),

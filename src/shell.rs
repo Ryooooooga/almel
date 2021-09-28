@@ -1,4 +1,3 @@
-use lazy_static::lazy_static;
 use structopt::clap::arg_enum;
 
 arg_enum! {
@@ -10,16 +9,7 @@ arg_enum! {
     }
 }
 
-impl Shell {
-    pub fn possible_values() -> &'static [&'static str] {
-        lazy_static! {
-            static ref VALUES: Vec<String> =
-                Shell::variants().iter().map(|s| s.to_lowercase()).collect();
-            static ref REFS: Vec<&'static str> = VALUES.iter().map(|s| s.as_str()).collect();
-        }
-        &REFS
-    }
-}
+pub static POSSIBLE_SHELL_VALUES: &[&str] = &["bash", "zsh", "fish"];
 
 impl Shell {
     pub fn init_script(&self) -> &'static str {

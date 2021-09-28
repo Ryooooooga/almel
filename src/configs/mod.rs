@@ -11,7 +11,6 @@ pub mod venv;
 
 use ansi_term::Color;
 use anyhow::Result;
-use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::fs::{create_dir_all, File};
@@ -127,7 +126,7 @@ impl Config {
 }
 impl Default for Config {
     fn default() -> Self {
-        serde_yaml::from_str(*DEFAULT_CONFIG_STR).unwrap()
+        serde_yaml::from_str(DEFAULT_CONFIG_STR).unwrap()
     }
 }
 
@@ -190,6 +189,4 @@ impl Config {
     }
 }
 
-lazy_static! {
-    static ref DEFAULT_CONFIG_STR: &'static str = include_str!("almel.yaml");
-}
+const DEFAULT_CONFIG_STR: &str = include_str!("almel.yaml");
