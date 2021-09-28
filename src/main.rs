@@ -12,7 +12,7 @@ fn main() {
     let opt = Opt::parse();
 
     match &opt.subcommand {
-        Subcommand::Init(args) => init::run(&args),
-        Subcommand::Prompt(args) => prompt::run(&args),
+        Subcommand::Init(args) => init::run(args),
+        Subcommand::Prompt(args) => prompt::run(args),
     };
 }

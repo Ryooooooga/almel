@@ -150,7 +150,7 @@ pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
 
     let head_status = get_head_status(repo, &head, config.display_tag, config.commit_hash_len);
     let status_icons = build_status_icons(config, statuses);
-    let remote_status = build_remote_status(config, &repo, &head);
+    let remote_status = build_remote_status(config, repo, &head);
 
     // Build content
     let mut content = String::new();

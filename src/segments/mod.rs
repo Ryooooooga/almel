@@ -25,16 +25,16 @@ pub fn build_segment<'ctx>(
     name: &str,
 ) -> Result<Option<Segment<'ctx>>, Error> {
     match name {
-        "os" => Ok(os::build_segment(&context)),
-        "shell" => Ok(shell::build_segment(&context)),
-        "directory" => Ok(directory::build_segment(&context)),
-        "user" => Ok(user::build_segment(&context)),
-        "status" => Ok(status::build_segment(&context)),
-        "time" => Ok(time::build_segment(&context)),
-        "duration" => Ok(duration::build_segment(&context)),
-        "git_repo" => Ok(git_repo::build_segment(&context)),
-        "git_user" => Ok(git_user::build_segment(&context)),
-        "venv" => Ok(venv::build_segment(&context)),
+        "os" => Ok(os::build_segment(context)),
+        "shell" => Ok(shell::build_segment(context)),
+        "directory" => Ok(directory::build_segment(context)),
+        "user" => Ok(user::build_segment(context)),
+        "status" => Ok(status::build_segment(context)),
+        "time" => Ok(time::build_segment(context)),
+        "duration" => Ok(duration::build_segment(context)),
+        "git_repo" => Ok(git_repo::build_segment(context)),
+        "git_user" => Ok(git_user::build_segment(context)),
+        "venv" => Ok(venv::build_segment(context)),
         _ => Err(format_err!("Unknown segment: {}", name)),
     }
 }
