@@ -164,7 +164,7 @@ impl Config {
         } else {
             // No config file
             let _ = Self::save_default_config(&config_path); // Ignore error
-            let config = Self::load_from_str(&DEFAULT_CONFIG_STR)?;
+            let config = Self::load_from_str(DEFAULT_CONFIG_STR)?;
 
             Ok(config)
         }

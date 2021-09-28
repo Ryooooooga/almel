@@ -64,7 +64,7 @@ fn get_head_status(
         None => {
             let config = repo.config().ok();
             let default_branch = config.and_then(|c| c.get_string("init.defaultBranch").ok());
-            return HeadStatus::Branch(default_branch.unwrap_or("master".to_string()));
+            return HeadStatus::Branch(default_branch.unwrap_or_else(|| "master".to_string()));
         }
     };
 
