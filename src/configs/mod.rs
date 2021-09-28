@@ -10,7 +10,7 @@ pub mod user;
 pub mod venv;
 
 use ansi_term::Color;
-use failure::Error;
+use anyhow::Result;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
@@ -131,22 +131,20 @@ impl Default for Config {
     }
 }
 
-type ConfigError = Error;
-
 impl Config {
-    pub fn load_from_str(s: &str) -> Result<Self, ConfigError> {
+    pub fn load_from_str(s: &str) -> Result<Self> {
         let config = serde_yaml::from_str(s)?;
 
         Ok(config)
     }
 
-    pub fn load_from_file(file: &File) -> Result<Self, ConfigError> {
+    pub fn load_from_file(file: &File) -> Result<Self> {
         let config = serde_yaml::from_reader(file)?;
 
         Ok(config)
     }
 
-    fn save_default_config<P: AsRef<Path>>(config_path: P) -> Result<(), ConfigError> {
+    fn save_default_config<P: AsRef<Path>>(config_path: P) -> Result<()> {
         let config_path = config_path.as_ref();
 
         if let Some(config_dir) = config_path.parent() {
@@ -159,9 +157,7 @@ impl Config {
         Ok(())
     }
 
-    pub fn load_from_file_or_create_default<P: AsRef<Path>>(
-        config_path: P,
-    ) -> Result<Config, ConfigError> {
+    pub fn load_from_file_or_create_default<P: AsRef<Path>>(config_path: P) -> Result<Config> {
         if let Ok(config_file) = File::open(&config_path) {
             let config = Self::load_from_file(&config_file)?;
 
