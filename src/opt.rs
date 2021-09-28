@@ -1,6 +1,6 @@
 use structopt::{clap, StructOpt};
 
-use crate::shell::Shell;
+use crate::shell::{Shell, POSSIBLE_SHELL_VALUES};
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -35,7 +35,7 @@ pub enum Subcommand {
 pub struct InitArgs {
     #[structopt(
             help = "Shell name",
-            possible_values = &Shell::possible_values(),
+            possible_values = POSSIBLE_SHELL_VALUES,
             case_insensitive = true,
         )]
     pub shell: Shell,
@@ -45,7 +45,7 @@ pub struct InitArgs {
 pub struct PromptArgs {
     #[structopt(
             help = "Shell name",
-            possible_values = &Shell::possible_values(),
+            possible_values = POSSIBLE_SHELL_VALUES,
             case_insensitive = true,
         )]
     pub shell: Shell,

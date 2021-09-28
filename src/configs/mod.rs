@@ -10,8 +10,7 @@ pub mod user;
 pub mod venv;
 
 use ansi_term::Color;
-use failure::Error;
-use lazy_static::lazy_static;
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::fs::{create_dir_all, File};
@@ -127,26 +126,24 @@ impl Config {
 }
 impl Default for Config {
     fn default() -> Self {
-        serde_yaml::from_str(*DEFAULT_CONFIG_STR).unwrap()
+        serde_yaml::from_str(DEFAULT_CONFIG_STR).unwrap()
     }
 }
 
-type ConfigError = Error;
-
 impl Config {
-    pub fn load_from_str(s: &str) -> Result<Self, ConfigError> {
+    pub fn load_from_str(s: &str) -> Result<Self> {
         let config = serde_yaml::from_str(s)?;
 
         Ok(config)
     }
 
-    pub fn load_from_file(file: &File) -> Result<Self, ConfigError> {
+    pub fn load_from_file(file: &File) -> Result<Self> {
         let config = serde_yaml::from_reader(file)?;
 
         Ok(config)
     }
 
-    fn save_default_config<P: AsRef<Path>>(config_path: P) -> Result<(), ConfigError> {
+    fn save_default_config<P: AsRef<Path>>(config_path: P) -> Result<()> {
         let config_path = config_path.as_ref();
 
         if let Some(config_dir) = config_path.parent() {
@@ -159,9 +156,7 @@ impl Config {
         Ok(())
     }
 
-    pub fn load_from_file_or_create_default<P: AsRef<Path>>(
-        config_path: P,
-    ) -> Result<Config, ConfigError> {
+    pub fn load_from_file_or_create_default<P: AsRef<Path>>(config_path: P) -> Result<Config> {
         if let Ok(config_file) = File::open(&config_path) {
             let config = Self::load_from_file(&config_file)?;
 
@@ -169,7 +164,7 @@ impl Config {
         } else {
             // No config file
             let _ = Self::save_default_config(&config_path); // Ignore error
-            let config = Self::load_from_str(&DEFAULT_CONFIG_STR)?;
+            let config = Self::load_from_str(DEFAULT_CONFIG_STR)?;
 
             Ok(config)
         }
@@ -194,6 +189,4 @@ impl Config {
     }
 }
 
-lazy_static! {
-    static ref DEFAULT_CONFIG_STR: &'static str = include_str!("almel.yaml");
-}
+const DEFAULT_CONFIG_STR: &str = include_str!("almel.yaml");

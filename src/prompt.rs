@@ -90,10 +90,10 @@ pub fn run(args: &PromptArgs) {
             match segments::build_segment(&context, name) {
                 Ok(Some(segment)) => {
                     if let Some(prev_bg) = prev_bg {
-                        display_separator(shell, &segment.style, prev_bg, separators);
+                        display_separator(shell, segment.style, prev_bg, separators);
                     }
 
-                    display_content(shell, &segment.style, &segment.content);
+                    display_content(shell, segment.style, &segment.content);
                     prev_bg = Some(segment.style.background);
                 }
                 Ok(None) => {}

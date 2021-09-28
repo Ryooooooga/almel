@@ -6,7 +6,10 @@ pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
 
     let repo = context.git_repo.as_ref()?;
     let git_config = repo.config().ok()?;
-    let user = git_config.get_string("user.name").ok()?;
+    let user = git_config
+        .get_string("user.name")
+        .ok()
+        .filter(|name| !name.is_empty())?;
 
     Some(Segment {
         style: &config.style,
