@@ -12,7 +12,6 @@ dependencies = [
  "dirs",
  "git2",
  "hostname",
- "lazy_static",
  "serde",
  "serde_yaml",
  "structopt",

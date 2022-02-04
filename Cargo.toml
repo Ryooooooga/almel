@@ -17,7 +17,6 @@ anyhow = '1.0'
 chrono = '0.4'
 dirs = '4.0'
 hostname = '0.3'
-lazy_static = '1.4'
 serde_yaml = '0.8'
 structopt = '0.3'
 
