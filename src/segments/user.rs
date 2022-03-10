@@ -25,11 +25,10 @@ pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
         .map(|h| h.to_string_lossy())
         .unwrap_or_else(|_| Cow::from("?"));
 
-    let content;
-    if config.display_host {
-        content = format!("{}@{}", username, hostname)
+    let content = if config.display_host {
+        format!("{}@{}", username, hostname)
     } else {
-        content = format!("{}", username)
+        format!("{}", username)
     };
 
     Some(Segment {
