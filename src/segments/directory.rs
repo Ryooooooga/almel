@@ -31,7 +31,7 @@ fn shrink_path(
     shrink_len: usize,
     cwd: &Path,
     home_dir: &Option<PathBuf>,
-    _repo_dir: Option<&Path>,
+    repo_dir: Option<&Path>,
 ) -> String {
     // "~/abc/def" -> ["def", "abc", "~"]
     let mut reversed_path_segments: Vec<String> = vec![];
@@ -46,13 +46,16 @@ fn shrink_path(
             break;
         }
 
+        let is_repo_dir = Some(dir) == repo_dir;
+
         let file_name = dir
             .file_name()
             .unwrap_or_default()
             .to_string_lossy()
             .to_string();
 
-        let shrinked_file_name = if !first && shrink_enabled {
+        let should_shrink = !first && !is_repo_dir && shrink_enabled;
+        let shrinked_file_name = if should_shrink {
             shrink_file_name(&file_name, shrink_len)
         } else {
             file_name
@@ -164,6 +167,36 @@ fn test_shrink_path() {
             home_dir: "/home/test",
             repo_dir: None,
             expected: "/ab/.de/g/h",
+        },
+        Scenario {
+            test_name: "inside of home, inside of git repo",
+            home_symbol: "~",
+            shrink_enabled: true,
+            shrink_len: 1,
+            cwd: "/home/test/repos/repo/ab/.cd/ef",
+            home_dir: "/home/test",
+            repo_dir: Some("/home/test/repos/repo"),
+            expected: "~/r/repo/a/.c/ef",
+        },
+        Scenario {
+            test_name: "outside of home, inside of git repo",
+            home_symbol: "~",
+            shrink_enabled: true,
+            shrink_len: 1,
+            cwd: "/repos/repo/ab/.cd/ef",
+            home_dir: "/home/test",
+            repo_dir: Some("/repos/repo"),
+            expected: "/r/repo/a/.c/ef",
+        },
+        Scenario {
+            test_name: "at home, at git repo",
+            home_symbol: "~",
+            shrink_enabled: true,
+            shrink_len: 1,
+            cwd: "/home/test",
+            home_dir: "/home/test",
+            repo_dir: Some("/home/test"),
+            expected: "~",
         },
     ];
 
