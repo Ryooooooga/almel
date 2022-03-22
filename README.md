@@ -15,6 +15,12 @@ A ZSH theme inspired by [agnoster-zsh-theme](https://github.com/agnoster/agnoste
 cargo install almel
 ```
 
+### From Homebrew
+
+```sh
+brew install ryooooooga/tap/almel
+```
+
 ### From precompiled binary
 
 I provide precompiled binary in [releases](https://github.com/Ryooooooga/almel/releases).
