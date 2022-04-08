@@ -27,7 +27,7 @@ almel::precmd() {
     local jobs="$#jobstates"
     local end="$EPOCHREALTIME"
     local duration="$(($end - ${ALMEL_START:-$end}))"
-    if (( ${+functions[async_init]} )); then
+    if (( ${+ASYNC_VERSION} )); then
         PROMPT="$(almel prompt zsh --exit-status="$exit_status" --num-jobs="$jobs" --duration="$duration" --no-git)"
         almel::async "$exit_status" "$jobs" "$duration"
     else
