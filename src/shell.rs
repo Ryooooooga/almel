@@ -12,9 +12,10 @@ arg_enum! {
 pub static POSSIBLE_SHELL_VALUES: &[&str] = &["bash", "zsh", "fish"];
 
 impl Shell {
-    pub fn init_script(&self) -> &'static str {
+    pub fn init_script(&self, asynchronous: bool) -> &'static str {
         match self {
             Self::Bash => include_str!("init/almel.bash"),
+            Self::Zsh if asynchronous => include_str!("init/almel-async.zsh"),
             Self::Zsh => include_str!("init/almel.zsh"),
             Self::Fish => include_str!("init/almel.fish"),
         }

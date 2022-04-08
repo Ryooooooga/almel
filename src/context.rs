@@ -18,7 +18,11 @@ impl<'ctx> Context<'ctx> {
             .or_else(|| std::env::current_dir().ok())
             .unwrap_or_default();
 
-        let git_repo = Repository::discover(&current_dir).ok();
+        let git_repo = if opt.no_git {
+            None
+        } else {
+            Repository::discover(&current_dir).ok()
+        };
 
         Self {
             current_dir,

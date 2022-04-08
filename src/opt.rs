@@ -39,6 +39,9 @@ pub struct InitArgs {
             case_insensitive = true,
         )]
     pub shell: Shell,
+
+    #[structopt(help = "Enable asynchronous prompt", long = "async")]
+    pub asynchronous: bool,
 }
 
 #[derive(Debug, StructOpt)]
@@ -58,4 +61,7 @@ pub struct PromptArgs {
 
     #[structopt(help = "Command duration", long = "duration", short = "d")]
     pub duration: f64,
+
+    #[structopt(help = "Disable git and git_user segment", long = "no-git")]
+    pub no_git: bool,
 }
