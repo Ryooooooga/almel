@@ -41,6 +41,12 @@ Add the following to your `.zshrc`.
 eval "$(almel init zsh)"
 ```
 
+Enable asynchronous prompt (requires [zsh-async](https://github.com/mafredri/zsh-async)).
+
+```zsh
+eval "$(almel init zsh --async)"
+```
+
 ### Fish
 
 Add the following to your `~/.config/fish/config.fish`:
