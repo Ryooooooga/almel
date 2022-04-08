@@ -58,4 +58,7 @@ pub struct PromptArgs {
 
     #[structopt(help = "Command duration", long = "duration", short = "d")]
     pub duration: f64,
+
+    #[structopt(help = "Disable git and git_user segment", long = "no-git")]
+    pub no_git: bool,
 }
