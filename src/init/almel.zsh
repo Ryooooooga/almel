@@ -1,21 +1,21 @@
-almel_preexec() {
+almel::preexec() {
     ALMEL_START="$EPOCHREALTIME"
 }
 
-almel_precmd() {
-    STATUS="$?"
-    NUM_JOBS="$#jobstates"
-    END="$EPOCHREALTIME"
-    DURATION="$(($END - ${ALMEL_START:-$END}))"
-    PROMPT="$(almel prompt zsh -s"$STATUS" -j"$NUM_JOBS" -d"$DURATION")"
+almel::precmd() {
+    local exit_status="$?"
+    local jobs="$#jobstates"
+    local end="$EPOCHREALTIME"
+    local duration="$(($end - ${ALMEL_START:-$end}))"
+    PROMPT="$(almel prompt zsh --exit-status="$exit_status" --num-jobs="$jobs" --duration="$duration")"
     unset ALMEL_START
 }
 
-almel_setup() {
+almel::setup() {
     autoload -Uz add-zsh-hook
 
-    add-zsh-hook precmd almel_precmd
-    add-zsh-hook preexec almel_preexec
+    add-zsh-hook precmd almel::precmd
+    add-zsh-hook preexec almel::preexec
 }
 
-almel_setup
+almel::setup
