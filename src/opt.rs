@@ -39,6 +39,9 @@ pub struct InitArgs {
             case_insensitive = true,
         )]
     pub shell: Shell,
+
+    #[structopt(help = "Enable asynchronous prompt", long = "async")]
+    pub asynchronous: bool,
 }
 
 #[derive(Debug, StructOpt)]
