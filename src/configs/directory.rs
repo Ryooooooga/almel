@@ -16,6 +16,9 @@ pub struct Config {
 
     #[serde(default)]
     pub shrink: ConfigShrink,
+
+    #[serde(default)]
+    pub aliases: Vec<ConfigAlias>,
 }
 impl Config {
     fn default_home() -> String {
@@ -29,6 +32,7 @@ impl Default for Config {
             error: Default::default(),
             home: Self::default_home(),
             shrink: Default::default(),
+            aliases: Vec::new(),
         }
     }
 }
@@ -68,4 +72,10 @@ impl Default for ConfigShrink {
             max_len: Self::default_max_len(),
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ConfigAlias {
+    pub path: String,
+    pub alias: String,
 }
