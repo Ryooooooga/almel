@@ -4,6 +4,7 @@ use crate::configs::git_repo::ConfigIcons;
 use crate::context::Context;
 use crate::segments::Segment;
 use std::cmp::min;
+use std::fmt::Write as _;
 
 #[derive(Debug)]
 pub enum HeadStatus {
@@ -263,10 +264,10 @@ fn build_remote_status_text(remote_status: &RemoteStatus, icons: &ConfigIcons) -
     let mut text = String::new();
 
     if remote_status.commits_behind != 0 {
-        text += &format!("{}{}", icons.behind, remote_status.commits_behind);
+        let _ = write!(text, "{}{}", icons.behind, remote_status.commits_behind);
     }
     if remote_status.commits_ahead != 0 {
-        text += &format!("{}{}", icons.ahead, remote_status.commits_ahead);
+        let _ = write!(text, "{}{}", icons.ahead, remote_status.commits_ahead);
     }
 
     text

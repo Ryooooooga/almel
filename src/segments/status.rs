@@ -1,5 +1,6 @@
 use crate::context::Context;
 use crate::segments::Segment;
+use std::fmt::Write as _;
 
 #[cfg(target_os = "windows")]
 fn is_root_user() -> bool {
@@ -25,16 +26,16 @@ pub fn build_segment<'ctx>(context: &'ctx Context) -> Option<Segment<'ctx>> {
         content += &config.icons.failed;
 
         if config.failed.display_exit_status {
-            content += &format!(" {}", context.opt.exit_status);
+            let _ = write!(content, " {}", context.opt.exit_status);
         }
     }
 
     if is_root_user() {
-        content += &format!(" {}", config.icons.root);
+        let _ = write!(content, " {}", config.icons.root);
     }
 
     if context.opt.num_jobs > 0 {
-        content += &format!(" {}", config.icons.jobs);
+        let _ = write!(content, " {}", config.icons.jobs);
     }
 
     Some(Segment { style, content })
