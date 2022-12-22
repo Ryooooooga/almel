@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "almel"
-version = "1.4.3"
+version = "1.4.4"
 dependencies = [
  "ansi_term",
  "anyhow",
