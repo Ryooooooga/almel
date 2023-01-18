@@ -21,6 +21,14 @@ impl Shell {
         }
     }
 
+    pub fn escape_content(&self, content: &str) -> String {
+        match self {
+            Self::Bash => content.replace('\\', "\\\\"),
+            Self::Zsh => content.replace('%', "%%"),
+            Self::Fish => content.into(),
+        }
+    }
+
     pub fn control_prefix(&self) -> &'static str {
         match self {
             Self::Bash => r"\[",
