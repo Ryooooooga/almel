@@ -1,5 +1,7 @@
 # Almel
 
+**Note**: `almel` is deprecated. Please consider using [croque](https://github.com/Ryooooooga/croque).
+
 [![](https://github.com/Ryooooooga/almel/workflows/Build/badge.svg)](https://github.com/Ryooooooga/almel/actions)
 [![](https://badgen.net/crates/v/almel)](https://crates.io/crates/almel)
 
